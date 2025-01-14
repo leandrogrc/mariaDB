@@ -1,8 +1,7 @@
 const {
   getAllUsers,
-  getUserByUsername: getUserByName,
-  postNewUser,
-  deleteUser,
+  getUserLinks,
+  deleteUserByUsername,
 } = require("../db/users");
 
 // GET all users
@@ -20,37 +19,11 @@ exports.getUsers = async (req, res) => {
 exports.getUserByUsername = async (req, res) => {
   const { username } = req.params;
   try {
-    const result = await getUserByName(username);
+    const result = await getUserLinks(username);
     res.status(200).json({ message: "Users fetched", users: result.response });
   } catch (err) {
     console.error("Error getting users:", err);
     return res.status(500).json({ error: "Failed to fetch users" });
-  }
-};
-
-// POST new user
-exports.postUser = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password)
-    return res
-      .status(400)
-      .json({ error: "Username and Password are required" });
-  try {
-    const result = await postNewUser(username, password);
-    if (result.success) {
-      return res.status(200).json({
-        message: "User added successfully",
-        insertId: result.insertId,
-      });
-    } else {
-      return res.status(500).json({
-        error: "Failed to add user",
-        details: result.message || result.error,
-      });
-    }
-  } catch (err) {
-    console.error("Error in post user func:", err);
-    return res.status(500).json({ error: "Failed to add user" });
   }
 };
 
@@ -62,7 +35,7 @@ exports.updateUser = (req, res) => res.json("PUT user ID = " + req.params.id);
 exports.delUser = async (req, res) => {
   const { username } = req.params;
   try {
-    const result = await deleteUser(username);
+    const result = await deleteUserByUsername(username);
     console.log(result);
     return res.status(200).json({ message: "All users deleted!" });
   } catch (error) {

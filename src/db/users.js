@@ -1,6 +1,6 @@
 const { eq } = require("drizzle-orm");
 
-const { db } = require("./");
+const { db } = require(".");
 const { usersTable, linksTable } = require("./schema");
 
 exports.getAllUsers = async function () {
@@ -19,7 +19,30 @@ exports.getAllUsers = async function () {
   }
 };
 
-exports.getUserByUsername = async function (username) {
+exports.getUserByName = async function (username) {
+  try {
+    const [user] = await db
+      .select({
+        id: usersTable.id,
+        username: usersTable.username,
+        password: usersTable.password,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.username, username))
+      .limit(1);
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
+    return { success: true, response: user };
+  } catch (err) {
+    console.error("Error:", err);
+    return { success: false, error: err.message };
+  }
+};
+
+exports.getUserLinks = async function (username) {
   try {
     const [user] = await db
       .select({
@@ -39,8 +62,6 @@ exports.getUserByUsername = async function (username) {
       .from(linksTable)
       .where(eq(linksTable.userId, user.id));
 
-    console.log({ links });
-
     return { success: true, response: { ...user, links } };
   } catch (err) {
     console.error("Error:", err);
@@ -48,7 +69,7 @@ exports.getUserByUsername = async function (username) {
   }
 };
 
-exports.postNewUser = async function (username, password) {
+exports.createUser = async function ({ username, password }) {
   try {
     const [userAlreadyExists] = await db
       .select()
@@ -87,7 +108,7 @@ exports.postNewUser = async function (username, password) {
 exports.deleteUserByUsername = async function (username) {
   try {
     const [result] = await db
-      .delete()
+      .delete(usersTable)
       .where(eq(usersTable.username, username))
       .limit(1);
 

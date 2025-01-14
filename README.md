@@ -15,6 +15,7 @@ Para testar o projeto localmente você precisa:
 2. Copar e alterar o arquivo `.env.example` para `.env`:
   ```env
   PORT=5000
+  COOKIE_SECRET=your-secret
   DATABASE_URL=mysql://root:root@localhost:3306/projeto
   ```
 3. Criar o banco de dados do projeto:

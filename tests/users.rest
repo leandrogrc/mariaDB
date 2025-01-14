@@ -1,4 +1,22 @@
-@domain=http://localhost:5000
+@domain = http://localhost:5000
+
+### Login
+POST {{domain}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "leandrogrc",
+    "password": "123456"
+}
+
+### POST user
+POST {{domain}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "leandrogrc",
+    "password": "123456"
+}
 
 ### GET users
 GET {{domain}}/api/users
@@ -6,11 +24,5 @@ GET {{domain}}/api/users
 ### GET user by username
 GET {{domain}}/api/users/leandrogrc
 
-### POST user
-POST {{domain}}/api/users
-Content-Type: application/json
-
-{
-    "username": "leandrogrc",
-    "password": "123456"
-}
+### Delete user by username
+DELETE {{domain}}/api/users/leandrogrc
