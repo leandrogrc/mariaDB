@@ -1,0 +1,27 @@
+### GET tasks
+GET http://localhost:5000/api/links
+
+### GET single task
+GET http://localhost:5000/api/links/10
+
+
+### POST task
+POST http://localhost:5000/api/links
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "link":"http://wa.me/5596991586908",
+    "title": "wpp leo"
+}
+
+### PUT task
+PUT http://localhost:5000/api/links/1
+Content-Type: application/json
+
+{
+    "text":"task 1"
+}
+
+### DELETE task
+DELETE http://localhost:5000/api/links/1132
