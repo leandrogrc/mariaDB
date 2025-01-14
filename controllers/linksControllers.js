@@ -30,20 +30,16 @@ const postLink = async (req, res) => {
     const result = await addLinkToUser(userId, link, title);
 
     if (result.success) {
-      return res
-        .status(200)
-        .json({
-          message: "Link added successfully",
-          insertId: result.insertId,
-        });
+      return res.status(200).json({
+        message: "Link added successfully",
+        insertId: result.insertId,
+      });
     } else {
       // In case there is an issue with the query (no rows affected, etc.)
-      return res
-        .status(500)
-        .json({
-          error: "Failed to add link",
-          details: result.message || result.error,
-        });
+      return res.status(500).json({
+        error: "Failed to add link",
+        details: result.message || result.error,
+      });
     }
   } catch (err) {
     console.error("Error in postLink:", err);

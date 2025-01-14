@@ -1,12 +1,13 @@
-const mariadb = require('mariadb');
+require("dotenv").config();
+
+const mariadb = require("mariadb");
 
 const pool = mariadb.createPool({
-    host: 'localhost',  // Database host
-    user: 'leandrogrc',       // Your MariaDB username
-    password: '531642', // Your MariaDB password
-    database: 'wpp_links', // The database you want to use
-    connectionLimit: 5 // Maximum number of connections
+  host: process.env.DB_HOST, // Database host
+  database: process.env.DB_NAME, // The database you want to use
+  user: process.env.DB_USER, // Your MariaDB username
+  password: process.env.DB_PASS, // Your MariaDB password
+  connectionLimit: 5, // Maximum number of connections
 });
 
-
-module.exports = {pool};
+module.exports = { pool };
