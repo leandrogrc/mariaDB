@@ -1,7 +1,7 @@
-@domain=http://localhost:5000
+@domain = http://localhost:5000
 
 ### Login
-POST {{domain}}/api/login
+POST {{domain}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 }
 
 ### POST user
-POST {{domain}}/api/register
+POST {{domain}}/api/auth/register
 Content-Type: application/json
 
 {

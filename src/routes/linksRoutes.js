@@ -7,12 +7,11 @@ const {
   updateLink,
   deleteLink,
 } = require("../controllers/linksControllers");
+const validateSession = require("../middlewares/validateSession");
 
-router.route("/api/links").get(getLinks).post(postLink);
-router
-  .route("/api/links/:id")
-  .get(getSingleLink)
-  .put(updateLink)
-  .delete(deleteLink);
+router.use(validateSession);
+
+router.route("").get(getLinks).post(postLink);
+router.route("/:id").get(getSingleLink).put(updateLink).delete(deleteLink);
 
 module.exports = router;

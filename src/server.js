@@ -12,9 +12,9 @@ app.use(cors());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 
-app.use(linksRouter);
-app.use(usersRouter);
-app.use(authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/links", linksRouter);
+app.use("/api/users", usersRouter);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
