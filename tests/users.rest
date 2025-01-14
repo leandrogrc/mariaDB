@@ -1,0 +1,16 @@
+@domain=http://localhost:5000
+
+### GET users
+GET {{domain}}/api/users
+
+### GET user by username
+GET {{domain}}/api/users/leandrogrc
+
+### POST user
+POST {{domain}}/api/users
+Content-Type: application/json
+
+{
+    "username": "leandrogrc",
+    "password": "123456"
+}

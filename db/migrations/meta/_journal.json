@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1736819771195,
+      "tag": "0000_lucky_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1736822477631,
+      "tag": "0001_dizzy_pride",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1736822607283,
+      "tag": "0002_perfect_flatman",
+      "breakpoints": true
+    }
+  ]
+}
