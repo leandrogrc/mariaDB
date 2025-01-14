@@ -1,6 +1,6 @@
 const { eq } = require("drizzle-orm");
 
-const { db } = require("./");
+const { db } = require(".");
 const { linksTable } = require("./schema");
 
 exports.getAllLinks = async function () {

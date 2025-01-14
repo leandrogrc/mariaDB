@@ -6,8 +6,8 @@ if (!process.env.DATABASE_URL) {
 }
 
 module.exports = defineConfig({
-  out: "./db/migrations",
-  schema: "./db/schema.js",
+  out: "./src/db/migrations",
+  schema: "./src/db/schema.js",
   dialect: "mysql",
   dbCredentials: {
     url: process.env.DATABASE_URL,
