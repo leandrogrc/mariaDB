@@ -1,12 +1,12 @@
 const {
   getAllUsers,
-  getSingleUsers,
+  getUserByUsername: getUserByName,
   postNewUser,
   deleteUser,
-} = require("../db/usersDB");
+} = require("../db/users");
 
 // GET all users
-const getUsers = async (req, res) => {
+exports.getUsers = async (req, res) => {
   try {
     const result = await getAllUsers();
     res.status(200).json({ message: "Users fetched", users: result.users });
@@ -15,19 +15,21 @@ const getUsers = async (req, res) => {
     return res.status(500).json({ error: "Failed to fetch users" });
   }
 };
+
 // GET single user
-const getAUser = async (req, res) => {
+exports.getUserByUsername = async (req, res) => {
   const { username } = req.params;
   try {
-    const result = await getSingleUsers(username);
+    const result = await getUserByName(username);
     res.status(200).json({ message: "Users fetched", users: result.response });
   } catch (err) {
     console.error("Error getting users:", err);
     return res.status(500).json({ error: "Failed to fetch users" });
   }
 };
+
 // POST new user
-const postUser = async (req, res) => {
+exports.postUser = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
     return res
@@ -51,10 +53,13 @@ const postUser = async (req, res) => {
     return res.status(500).json({ error: "Failed to add user" });
   }
 };
+
 // PUT a user
-const updateUser = (req, res) => res.json("PUT user ID = " + req.params.id);
+// TODO: update user
+exports.updateUser = (req, res) => res.json("PUT user ID = " + req.params.id);
+
 // DELETE a user
-const delUser = async (req, res) => {
+exports.delUser = async (req, res) => {
   const { username } = req.params;
   try {
     const result = await deleteUser(username);
@@ -64,12 +69,4 @@ const delUser = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: "Failed to delete all users" });
   }
-};
-
-module.exports = {
-  getAUser,
-  getUsers,
-  postUser,
-  updateUser,
-  delUser,
 };
