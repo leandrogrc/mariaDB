@@ -1,10 +1,36 @@
 # Projeto de Banco de Dados 2
 
-### Projeto
+## Projeto
 
-> TODO: Especificar objetivos e funções do projeto 
+Página para divulgação de url personalizadas.
 
-### Desenvolvimento
+O que deverá ser mostrado:
+
+- Nome
+- Foto de perfil
+- Descrição
+- Links
+  - Título
+  - Url
+  - Ícone
+
+## Frontend
+
+Deverá ter as seguintes páginas:
+- Página pública para mostrar os dados do usuário;
+- Página autenticada para alterar dados do usuário;
+- Página de gerenciamento da aplicação;
+- Página de não encontrado, caso o nome de usuário não exista.
+
+URL's:
+- `/admin` -> Página de gerenciamento da aplicação
+- `/login` -> Página de login
+- `/account` -> Gerenciamento de conta
+- `/link/{username}` -> Página pública com os links do usuário
+
+--- 
+
+## Desenvolvimento
 
 Para testar o projeto localmente você precisa:
 
@@ -34,3 +60,54 @@ Para testar o projeto localmente você precisa:
 ```bash
 npm run start
 ```
+
+---
+
+## Regras de negócio
+
+- [ ] Autenticação
+  - [x] Login
+  - [ ] Logout
+  - [x] Criação de usuário
+  - [ ] Edição de usuário
+  - [ ] Deleção de usuário
+  - [ ] Confirmar conta
+  - [ ] Recuperar conta
+- [ ] Links
+  - [x] Criação de links
+  - [x] Deleção de links
+  - [x] Listagem de links
+  - [ ] Edição de links
+- [ ] Sistema de logs
+  - [ ] Criação de log
+  - [ ] Listagem de logs
+- [ ] Observabilidade de erros
+  - [ ] Listagem de erros
+  - [ ] Criação de erros
+
+## Banco de dados
+
+Entidades:
+- `users`
+- `sessions`
+- `links`
+- `error_logs`
+- `logs`
+- `config`
+
+## Roadmap
+
+- [ ] **Autenticação**
+  - [x] Token de sessão
+  - [ ] Token de atualização de sessão 
+- [ ] **Envio de e-mail**
+  - [ ] Configuração SMTP
+  - [ ] Templates de e-mail
+    - [ ] Confirmar e-mail
+    - [ ] Recuperar senha
+- [ ] **Páginas web**
+  - [ ] Página de usuário
+  - [ ] Página de gerenciamento de dados
+- [ ] **Testes**
+  - [ ] Testes unitários
+  - [ ] Testes de integração
