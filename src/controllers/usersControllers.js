@@ -1,8 +1,26 @@
 const {
   getAllUsers,
   getUserLinks,
+  getUserByUsername,
   deleteUserByUsername,
 } = require("../db/users");
+const { getLinksByUserId } = require("../db/links");
+
+exports.getUserPage = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await getUserByUsername(username);
+    if (!user.response?.id) {
+      // TODO: 404 page
+      return res.status(404).send();
+    }
+    const links = await getLinksByUserId(user.response.id);
+
+    return res.render("userpage", { user: user.response, links: links.data });
+  } catch (error) {
+    return res.status(500).send();
+  }
+};
 
 // GET all users
 exports.getUsers = async (req, res) => {

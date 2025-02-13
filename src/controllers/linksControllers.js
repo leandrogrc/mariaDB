@@ -13,7 +13,8 @@ const getLinks = async (req, res) => {
 
 // POST new link
 const postLink = async (req, res) => {
-  const { userId, link, title } = req.body;
+  const userId = req.user.id;
+  const { link, title } = req.body;
 
   // Validate the presence of userId and link
   if (!userId || !link || !title) {

@@ -19,13 +19,14 @@ exports.getAllUsers = async function () {
   }
 };
 
-exports.getUserByName = async function (username) {
+exports.getUserByUsername = async function (username) {
   try {
     const [user] = await db
       .select({
         id: usersTable.id,
+        name: usersTable.name,
         username: usersTable.username,
-        password: usersTable.password,
+        photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)
       .where(eq(usersTable.username, username))
@@ -69,7 +70,13 @@ exports.getUserLinks = async function (username) {
   }
 };
 
-exports.createUser = async function ({ username, password }) {
+exports.createUser = async function ({
+  name,
+  username,
+  password,
+  photoUrl = null,
+  description = null,
+}) {
   try {
     const [userAlreadyExists] = await db
       .select()
@@ -87,8 +94,11 @@ exports.createUser = async function ({ username, password }) {
     const [{ id }] = await db
       .insert(usersTable)
       .values({
+        name,
         username,
         password,
+        photoUrl,
+        description,
       })
       .$returningId();
 

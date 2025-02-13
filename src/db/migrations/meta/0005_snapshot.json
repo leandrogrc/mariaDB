@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "b6f8fd0f-d280-45f7-b34d-cc886c18c278",
-  "prevId": "1f11868b-9301-4ebf-9b8e-8e6c0d20b2b5",
+  "id": "9b0fc5fa-f118-414d-9e32-8fd99c9d0d2f",
+  "prevId": "b6f8fd0f-d280-45f7-b34d-cc886c18c278",
   "tables": {
     "users": {
       "name": "users",
@@ -14,9 +14,30 @@
           "notNull": true,
           "autoincrement": true
         },
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "photo_url": {
+          "name": "photo_url",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(300)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "username": {
           "name": "username",
-          "type": "varchar(100)",
+          "type": "varchar(25)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -135,12 +156,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "sessions_userId_users_id_fk": {
-          "name": "sessions_userId_users_id_fk",
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"

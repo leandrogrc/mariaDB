@@ -1,4 +1,4 @@
-const { getUserByName, createUser } = require("../db/users");
+const { getUserByUsername, createUser } = require("../db/users");
 const { createSession } = require("../db/session");
 const bcrypt = require("bcrypt");
 
@@ -13,7 +13,7 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const result = await getUserByName(username);
+    const result = await getUserByUsername(username);
     if (result.success) {
       const samePassword = await bcrypt.compare(
         password,
@@ -46,14 +46,27 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password)
+  const {
+    name,
+    username,
+    password,
+    photoUrl = null,
+    description = null,
+  } = req.body;
+  if (!name || !username || !password)
     return res
       .status(400)
       .json({ error: "Username and Password are required" });
   try {
     const cryptPassword = await bcrypt.hash(password, hashSalt);
-    const result = await createUser({ username, password: cryptPassword });
+    const result = await createUser({
+      name,
+      username,
+      password: cryptPassword,
+      photoUrl,
+      description,
+    });
+
     if (result.success) {
       return res.status(200).json({
         message: "User added successfully",

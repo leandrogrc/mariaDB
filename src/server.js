@@ -14,9 +14,9 @@ app.use(cors());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 
-app.use("/api/auth", authRouter);
-app.use("/api/links", linksRouter);
-app.use("/api/users", usersRouter);
+app.use("/auth", authRouter);
+app.use("/links", linksRouter);
+app.use("/users", usersRouter);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

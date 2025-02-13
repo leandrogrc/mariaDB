@@ -8,6 +8,9 @@ const {
   deleteLink,
 } = require("../controllers/linksControllers");
 const validateSession = require("../middlewares/validateSession");
+const { getUserPage } = require('../controllers/usersControllers');
+
+router.get("/:username", getUserPage);
 
 router.use(validateSession);
 

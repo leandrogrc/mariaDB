@@ -12,6 +12,19 @@ exports.getAllLinks = async function () {
   }
 };
 
+exports.getLinksByUserId = async function (userId) {
+  try {
+    const links = await db
+      .select()
+      .from(linksTable)
+      .where(eq(linksTable.userId, userId));
+
+    return { success: true, data: links };
+  } catch (error) {
+    return { success: false, data: [] };
+  }
+};
+
 exports.getLinkById = async function (linkId) {
   try {
     const [link] = await db

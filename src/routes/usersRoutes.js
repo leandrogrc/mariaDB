@@ -10,7 +10,7 @@ const validateSession = require("../middlewares/validateSession");
 
 router.use(validateSession);
 
-router.route("").get(getUsers);
+router.route("/").get(getUsers);
 router.route("/:id").put(updateUser);
 router.route("/:username").delete(delUser).get(getUserByUsername);
 
