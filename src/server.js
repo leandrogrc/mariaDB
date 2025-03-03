@@ -15,7 +15,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/auth", authRouter);
+app.use("/", authRouter);
 app.use("/links", linksRouter);
 app.use("/users", usersRouter);
 

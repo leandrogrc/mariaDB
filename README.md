@@ -25,6 +25,7 @@ Deverá ter as seguintes páginas:
 URL's:
 - `/admin` -> Página de gerenciamento da aplicação
 - `/login` -> Página de login
+- `/register` -> Página de login
 - `/account` -> Gerenciamento de conta
 - `/link/{username}` -> Página pública com os links do usuário
 

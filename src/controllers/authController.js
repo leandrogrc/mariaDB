@@ -49,29 +49,39 @@ exports.login = async (req, res) => {
 };
 
 exports.loginPage = async (_req, res) => {
-  return res.render("login", { username: "" });
+  return res.render("login", { username: "", error: "" });
 };
 
 exports.register = async (req, res) => {
-  const {
-    name,
-    username,
-    password,
-    photoUrl = null,
-    description = null,
-  } = req.body;
-  if (!name || !username || !password)
+  const { name, username, password, confirmPassword } = req.body;
+  if (!name || !username || !password || !confirmPassword)
     return res
       .status(400)
-      .json({ error: "Username and Password are required" });
+      .render("register", { error: "Alguns dados estão faltando" });
+
+  if (password !== confirmPassword) {
+    return res.status(400).render("register", {
+      name,
+      username,
+      error: "Senha e confirmação devem ser o mesmo",
+    });
+  }
+
   try {
+    const alreadyExists = await getUserByUsername(username);
+    if (alreadyExists.success) {
+      return res.render("register", {
+        name,
+        username,
+        error: "Usuário já cadastrado",
+      });
+    }
+
     const cryptPassword = await bcrypt.hash(password, hashSalt);
     const result = await createUser({
       name,
       username,
       password: cryptPassword,
-      photoUrl,
-      description,
     });
 
     if (result.success) {
@@ -80,13 +90,18 @@ exports.register = async (req, res) => {
         insertId: result.insertId,
       });
     } else {
-      return res.status(500).json({
-        error: "Failed to add user",
-        details: result.message || result.error,
+      return res.status(500).render("register", {
+        name,
+        username,
+        error: "Não foi possível criar usuário",
       });
     }
-  } catch (err) {
-    console.error("Error in post user func:", err);
-    return res.status(500).json({ error: "Failed to add user" });
+  } catch (error) {
+    console.error("Error during user creation:", error);
+    return res.status(500).render("error");
   }
+};
+
+exports.registerPage = async (_req, res) => {
+  return res.render("register", { name: "", username: "", error: "" });
 };
