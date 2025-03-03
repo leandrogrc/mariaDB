@@ -11,8 +11,7 @@ exports.getUserPage = async (req, res) => {
   try {
     const user = await getUserByUsername(username);
     if (!user.response?.id) {
-      // TODO: 404 page
-      return res.status(404).send();
+      return res.status(404).render("user-not-found", { username });
     }
     const links = await getLinksByUserId(user.response.id);
 
