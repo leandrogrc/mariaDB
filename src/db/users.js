@@ -19,13 +19,18 @@ exports.getAllUsers = async function () {
   }
 };
 
-exports.getUserByUsername = async function (username) {
+exports.getUserByUsername = async function (username, showPassword = false) {
   try {
     const [user] = await db
       .select({
         id: usersTable.id,
         name: usersTable.name,
         username: usersTable.username,
+        ...(showPassword
+          ? {
+              password: usersTable.password,
+            }
+          : {}),
         photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)

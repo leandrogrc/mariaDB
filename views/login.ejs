@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <title>Login</title>
+  </head>
+  <body
+    class="bg-white md:bg-zinc-100 min-h-full min-h-screen flex flex-col justify-center items-center"
+  >
+    <form
+      method="post"
+      action="/auth/login"
+      class="w-full md:border border-zinc-300 md:max-w-sm bg-white text-center md:shadow md:rounded p-6"
+    >
+      <h1 class="text-black text-3xl font-medium mb-6">Entrar</h1>
+      <fieldset class="w-full mb-4 flex flex-col items-start">
+        <label
+          for="username"
+          class="block text-sm text-zinc-600 font-medium mb-1"
+          >Usuário</label
+        >
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+          value="<%= username %>"
+        />
+      </fieldset>
+      <fieldset class="w-full mb-4 flex flex-col items-start">
+        <label
+          for="password"
+          class="block text-sm text-zinc-600 font-medium mb-1"
+          >Senha</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+        />
+      </fieldset>
+      <% if (error) { %>
+      <span
+        class="text-center text-sm block border border-red-400 bg-red-100 text-red-500 px-4 py-2 mb-4 w-full rounded"
+        ><%= error %></span
+      >
+      <% } %>
+      <button
+        type="submit"
+        class="text-white cursor-pointer text-lg font-medium text-center py-2 w-full rounded bg-indigo-500 hover:bg-indigo-800 transition"
+      >
+        Entrar
+      </button>
+    </form>
+  </body>
+</html>

@@ -7,13 +7,14 @@ const hashSalt = 10;
 exports.login = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password are required" });
+    return res.status(400).render("login", {
+      username,
+      error: "Usuário e senha são obrigatórios",
+    });
   }
 
   try {
-    const result = await getUserByUsername(username);
+    const result = await getUserByUsername(username, true);
     if (result.success) {
       const samePassword = await bcrypt.compare(
         password,
@@ -30,19 +31,25 @@ exports.login = async (req, res) => {
           maxAge: 1000 * 60 * 60,
         });
 
+        // TODO: add user homepage
         return res.status(200).json({
           message: "Logged in successfully",
         });
       }
     }
 
-    return res.status(400).json({
-      error: "Username or password invalid",
+    return res.status(400).render("login", {
+      username,
+      error: "Usuário ou senha inválidos",
     });
   } catch (error) {
-    console.error("Error in postLink:", err);
-    return res.status(500).json({ error: "Failed login" });
+    console.error("Error in login:", error);
+    return res.status(500).render("error");
   }
+};
+
+exports.loginPage = async (_req, res) => {
+  return res.render("login", { username: "" });
 };
 
 exports.register = async (req, res) => {
