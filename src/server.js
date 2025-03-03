@@ -18,5 +18,7 @@ app.use("/auth", authRouter);
 app.use("/links", linksRouter);
 app.use("/users", usersRouter);
 
+app.use("*", (_req, res) => res.status(400).render("not-found"));
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
