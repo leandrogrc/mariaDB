@@ -16,8 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(authRouter);
+app.use(linksRouter);
 app.use(usersRouter);
-app.use("/", linksRouter);
 
 app.use("*", (_req, res) => res.status(400).render("not-found"));
 

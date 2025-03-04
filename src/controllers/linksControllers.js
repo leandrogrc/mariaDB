@@ -1,4 +1,10 @@
-const { addLink, delLink, getAllLinks, getLinkById } = require("../db/links");
+const {
+  createLink,
+  delLink,
+  getAllLinks,
+  getLinkById,
+  updateLinkById,
+} = require("../db/links");
 
 // GET all links
 const getLinks = async (req, res) => {
@@ -11,68 +17,93 @@ const getLinks = async (req, res) => {
   }
 };
 
-// POST new link
+const getCreateLinkPage = async (req, res) => {
+  return res.status(200).render("create-link");
+};
+
 const postLink = async (req, res) => {
   const userId = req.user.id;
-  const { link, title } = req.body;
+  const { title, link, visible = false } = req.body;
 
-  // Validate the presence of userId and link
   if (!userId || !link || !title) {
-    return res.status(400).json({ error: "link and title are required" });
+    return res.status(400).render("error");
   }
 
   try {
-    // Add link to the user
-    const result = await addLink({ userId, link, title });
-
+    const result = await createLink({
+      userId,
+      link,
+      title,
+      visible: visible === "on",
+    });
     if (result.success) {
-      return res.status(200).json({
-        message: "Link added successfully",
-        insertId: result.insertId,
-      });
-    } else {
-      // In case there is an issue with the query (no rows affected, etc.)
-      return res.status(500).json({
-        error: "Failed to add link",
-        details: result.message || result.error,
-      });
+      return res.status(200).redirect("/account");
     }
+
+    return res.status(400).render("error");
   } catch (err) {
-    console.error("Error in postLink:", err);
-    return res.status(500).json({ error: "Failed to add link" });
+    console.error(err);
+    return res.status(500).render("error");
   }
 };
 
-// GET single link
-const getSingleLink = async (req, res) => {
+const getUpdateLinkPage = async (req, res) => {
   try {
-    const result = await getLinkById(req.params.id);
-    res.status(200).json({ data: result.data, message: result.message });
-  } catch (err) {
-    console.error("Error in getLinks:", err);
-    return res.status(500).json({ error: "Failed to fetch links" });
+    const linkExists = await getLinkById(req.params.id);
+
+    if (linkExists.success && linkExists.data?.userId === req.user.id) {
+      return res.status(200).render("edit-link", { link: linkExists.data });
+    }
+
+    return res.status(400).render("not-found");
+  } catch (error) {
+    return res.status(500).render("error");
   }
 };
 
-// PUT a link
-// TODO: update link
-const updateLink = (req, res) => res.json("PUT link ID = " + req.params.id);
+const updateLink = async (req, res) => {
+  try {
+    const { title, link, visible = false } = req.body;
+    const linkExists = await getLinkById(req.params.id);
 
-// DELETE a link
+    if (linkExists.success && linkExists.data?.userId === req.user.id) {
+      await updateLinkById(req.params.id, {
+        title,
+        link,
+        visible: visible === "on",
+      });
+
+      return res.status(200).redirect("/account");
+    }
+
+    return res.status(400).render("error");
+  } catch (err) {
+    console.error(err);
+    return res.status(500).render("error");
+  }
+};
+
 const deleteLink = async (req, res) => {
   try {
-    const result = await delLink(req.params.id);
-    res.status(200).json({ data: result.data, message: result.message });
+    const linkExists = await getLinkById(req.params.id);
+
+    if (linkExists.success && linkExists.data?.userId === req.user.id) {
+      await delLink(req.params.id);
+      return res.status(200).redirect("/account");
+    }
+
+    return res.status(400).render("error");
   } catch (err) {
-    console.error("Error in getLinks:", err);
-    return res.status(500).json({ error: "Failed to fetch links" });
+    console.error(err);
+    return res.status(500).render("error");
   }
 };
 
 module.exports = {
-  getSingleLink,
   getLinks,
+  getCreateLinkPage,
   postLink,
+  getUpdateLinkPage,
   updateLink,
   deleteLink,
 };

@@ -44,7 +44,7 @@ exports.validateSession = async function (sessionId) {
         id: usersTable.id,
         name: usersTable.name,
         username: usersTable.username,
-        description: usersTable.username,
+        description: usersTable.description,
         photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)

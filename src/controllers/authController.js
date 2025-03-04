@@ -75,17 +75,23 @@ exports.register = async (req, res) => {
     }
 
     const cryptPassword = await bcrypt.hash(password, hashSalt);
-    const result = await createUser({
+    const newuser = await createUser({
       name,
       username,
       password: cryptPassword,
     });
 
-    if (result.success) {
-      return res.status(200).json({
-        message: "User added successfully",
-        insertId: result.insertId,
+    if (newuser.success) {
+      const { result: sessionId } = await createSession(newuser.response.id);
+
+      res.cookie("session_token", sessionId, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        maxAge: 1000 * 60 * 60,
       });
+
+      return res.status(200).redirect("/account");
     } else {
       return res.status(500).render("register", {
         name,
@@ -101,4 +107,15 @@ exports.register = async (req, res) => {
 
 exports.registerPage = async (_req, res) => {
   return res.render("register", { name: "", username: "", error: "" });
+};
+
+exports.logout = async (_req, res) => {
+  res.clearCookie("session_token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    maxAge: 0,
+  });
+
+  return res.status(200).redirect("/login");
 };

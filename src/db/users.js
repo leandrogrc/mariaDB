@@ -31,6 +31,7 @@ exports.getUserByUsername = async function (username, showPassword = false) {
               password: usersTable.password,
             }
           : {}),
+        description: usersTable.description,
         photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)
@@ -113,10 +114,32 @@ exports.createUser = async function ({
       .where(eq(usersTable.id, id))
       .limit(1);
 
-    return { success: true, result: newUser };
+    return { success: true, response: newUser };
   } catch (err) {
     console.error("Error:", err);
     return { success: false, error: err.message };
+  }
+};
+
+exports.updateUserById = async function (
+  userId,
+  { name, photoUrl = null, description = null }
+) {
+  try {
+    await db
+      .update(usersTable)
+      .set({
+        name,
+        photoUrl,
+        description,
+      })
+      .where(eq(usersTable.id, userId))
+      .limit(1);
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error.message };
   }
 };
 
