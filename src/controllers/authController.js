@@ -31,10 +31,7 @@ exports.login = async (req, res) => {
           maxAge: 1000 * 60 * 60,
         });
 
-        // TODO: add user homepage
-        return res.status(200).json({
-          message: "Logged in successfully",
-        });
+        return res.status(200).redirect("/account");
       }
     }
 

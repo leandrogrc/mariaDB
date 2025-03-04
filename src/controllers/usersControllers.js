@@ -6,6 +6,19 @@ const {
 } = require("../db/users");
 const { getLinksByUserId } = require("../db/links");
 
+exports.getUserPanel = async (req, res) => {
+  try {
+    const links = await getLinksByUserId(req.user.id);
+    return res.render("homepage", {
+      user: req.user,
+      links: links.data,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).render("error");
+  }
+};
+
 exports.getUserPage = async (req, res) => {
   const { username } = req.params;
   try {

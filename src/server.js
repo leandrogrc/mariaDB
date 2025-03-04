@@ -15,9 +15,9 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/", authRouter);
-app.use("/links", linksRouter);
-app.use("/users", usersRouter);
+app.use(authRouter);
+app.use(usersRouter);
+app.use("/", linksRouter);
 
 app.use("*", (_req, res) => res.status(400).render("not-found"));
 

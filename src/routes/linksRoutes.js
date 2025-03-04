@@ -10,7 +10,7 @@ const {
 const validateSession = require("../middlewares/validateSession");
 const { getUserPage } = require('../controllers/usersControllers');
 
-router.get("/:username", getUserPage);
+router.get("/links/:username", getUserPage);
 
 router.use(validateSession);
 

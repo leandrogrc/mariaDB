@@ -1,4 +1,4 @@
-const { eq } = require("drizzle-orm");
+const { eq, and, is } = require("drizzle-orm");
 
 const { db } = require(".");
 const { linksTable } = require("./schema");
@@ -12,12 +12,16 @@ exports.getAllLinks = async function () {
   }
 };
 
-exports.getLinksByUserId = async function (userId) {
+exports.getLinksByUserId = async function (userId, getActiveLinks = false) {
   try {
     const links = await db
       .select()
       .from(linksTable)
-      .where(eq(linksTable.userId, userId));
+      .where(
+        getActiveLinks
+          ? and(eq(linksTable.userId, userId), is(linksTable.visible, true))
+          : eq(linksTable.userId, userId)
+      );
 
     return { success: true, data: links };
   } catch (error) {

@@ -16,11 +16,7 @@
   >
     <section class="mb-8 w-full max-w-2xl">
       <img
-        <% if (user.photoUrl) { %>
-          src="<%= user.photoUrl %>"
-        <% } else { %>
-          src="https://ui-avatars.com/api/?name=<%= user.name.replace(/\s/g, "+") %>"
-        <% } %>
+        src="<%= user.photoUrl ? user.photoUrl : `https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}`%>"
         class="rounded-full w-32 mb-4 mx-auto"
       />
       <p class="text-center">

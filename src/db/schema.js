@@ -3,6 +3,7 @@ const {
   int,
   varchar,
   datetime,
+  boolean,
 } = require("drizzle-orm/mysql-core");
 
 const usersTable = mysqlTable("users", {
@@ -23,6 +24,7 @@ const linksTable = mysqlTable("links", {
     .references(() => usersTable.id),
   title: varchar("title", { length: 255 }).notNull(),
   link: varchar("link", { length: 255 }).notNull(),
+  visible: boolean("visible").default(false).notNull(),
 });
 
 const sessionsTable = mysqlTable("sessions", {

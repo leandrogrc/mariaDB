@@ -42,7 +42,10 @@ exports.validateSession = async function (sessionId) {
     const [user] = await db
       .select({
         id: usersTable.id,
+        name: usersTable.name,
         username: usersTable.username,
+        description: usersTable.username,
+        photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)
       .where(eq(usersTable.id, session.userId))
