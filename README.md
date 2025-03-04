@@ -68,9 +68,9 @@ npm run start
 
 - [ ] Autenticação
   - [x] Login
-  - [ ] Logout
+  - [X] Logout
   - [x] Criação de usuário
-  - [ ] Edição de usuário
+  - [X] Edição de usuário
   - [ ] Deleção de usuário
   - [ ] Confirmar conta
   - [ ] Recuperar conta
@@ -78,7 +78,7 @@ npm run start
   - [x] Criação de links
   - [x] Deleção de links
   - [x] Listagem de links
-  - [ ] Edição de links
+  - [X] Edição de links
 - [ ] Sistema de logs
   - [ ] Criação de log
   - [ ] Listagem de logs
@@ -107,8 +107,8 @@ Entidades:
     - [ ] Confirmar e-mail
     - [ ] Recuperar senha
 - [ ] **Páginas web**
-  - [ ] Página de usuário
-  - [ ] Página de gerenciamento de dados
+  - [x] Página de usuário
+  - [x] Página de gerenciamento de dados
 - [ ] **Testes**
   - [ ] Testes unitários
   - [ ] Testes de integração
