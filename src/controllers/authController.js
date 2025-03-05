@@ -1,5 +1,5 @@
 const { getUserByUsername, createUser } = require("../db/users");
-const { createSession } = require("../db/session");
+const { createSession, removeSession } = require("../db/session");
 const bcrypt = require("bcrypt");
 
 const hashSalt = 10;
@@ -109,7 +109,13 @@ exports.registerPage = async (_req, res) => {
   return res.render("register", { name: "", username: "", error: "" });
 };
 
-exports.logout = async (_req, res) => {
+exports.logout = async (req, res) => {
+  try {
+    await removeSession(req.cookies.session_token);
+  } catch (error) {
+    console.error(error);
+  }
+
   res.clearCookie("session_token", {
     httpOnly: true,
     sameSite: "none",

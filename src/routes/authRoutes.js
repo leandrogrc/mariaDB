@@ -15,6 +15,6 @@ router.get("/", validateSession, (req, res) =>
 
 router.route("/login").get(loginPage).post(login);
 router.route("/register").get(registerPage).post(register);
-router.route("/logout").post(logout);
+router.post("/logout", validateSession, logout);
 
 module.exports = router;
