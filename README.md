@@ -68,9 +68,9 @@ npm run start
 
 - [ ] Autenticação
   - [x] Login
-  - [X] Logout
+  - [x] Logout
   - [x] Criação de usuário
-  - [X] Edição de usuário
+  - [x] Edição de usuário
   - [ ] Deleção de usuário
   - [ ] Confirmar conta
   - [ ] Recuperar conta
@@ -78,7 +78,7 @@ npm run start
   - [x] Criação de links
   - [x] Deleção de links
   - [x] Listagem de links
-  - [X] Edição de links
+  - [x] Edição de links
 - [ ] Sistema de logs
   - [ ] Criação de log
   - [ ] Listagem de logs
