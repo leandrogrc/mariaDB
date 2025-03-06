@@ -25,6 +25,7 @@ Deverá ter as seguintes páginas:
 URL's:
 - `/admin` -> Página de gerenciamento da aplicação
 - `/login` -> Página de login
+- `/register` -> Página de login
 - `/account` -> Gerenciamento de conta
 - `/link/{username}` -> Página pública com os links do usuário
 
@@ -67,9 +68,9 @@ npm run start
 
 - [ ] Autenticação
   - [x] Login
-  - [ ] Logout
+  - [x] Logout
   - [x] Criação de usuário
-  - [ ] Edição de usuário
+  - [x] Edição de usuário
   - [ ] Deleção de usuário
   - [ ] Confirmar conta
   - [ ] Recuperar conta
@@ -77,7 +78,7 @@ npm run start
   - [x] Criação de links
   - [x] Deleção de links
   - [x] Listagem de links
-  - [ ] Edição de links
+  - [x] Edição de links
 - [ ] Sistema de logs
   - [ ] Criação de log
   - [ ] Listagem de logs
@@ -106,8 +107,8 @@ Entidades:
     - [ ] Confirmar e-mail
     - [ ] Recuperar senha
 - [ ] **Páginas web**
-  - [ ] Página de usuário
-  - [ ] Página de gerenciamento de dados
+  - [x] Página de usuário
+  - [x] Página de gerenciamento de dados
 - [ ] **Testes**
   - [ ] Testes unitários
   - [ ] Testes de integração

@@ -1,8 +1,20 @@
 const router = require("express").Router();
 
-const { login, register } = require("../controllers/authController");
+const {
+  login,
+  loginPage,
+  register,
+  logout,
+  registerPage,
+} = require("../controllers/authController");
+const validateSession = require("../middlewares/validateSession");
 
-router.post("/login", login);
-router.post("/register", register);
+router.get("/", validateSession, (req, res) =>
+  res.status(200).redirect("/account")
+);
+
+router.route("/login").get(loginPage).post(login);
+router.route("/register").get(registerPage).post(register);
+router.post("/logout", validateSession, logout);
 
 module.exports = router;

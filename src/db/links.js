@@ -1,4 +1,4 @@
-const { eq } = require("drizzle-orm");
+const { eq, and } = require("drizzle-orm");
 
 const { db } = require(".");
 const { linksTable } = require("./schema");
@@ -9,6 +9,24 @@ exports.getAllLinks = async function () {
     return { success: true, response: links };
   } catch (error) {
     return { success: false, error: error.message };
+  }
+};
+
+exports.getLinksByUserId = async function (userId, getActiveLinks = false) {
+  try {
+    const links = await db
+      .select()
+      .from(linksTable)
+      .where(
+        getActiveLinks
+          ? and(eq(linksTable.userId, userId), eq(linksTable.visible, true))
+          : eq(linksTable.userId, userId)
+      );
+
+    return { success: true, data: links };
+  } catch (error) {
+    console.error(error);
+    return { success: false, data: [] };
   }
 };
 
@@ -31,13 +49,14 @@ exports.getLinkById = async function (linkId) {
   }
 };
 
-exports.addLink = async function ({ userId, link, title }) {
+exports.createLink = async function ({ userId, link, title, visible = false }) {
   try {
     const { id } = await db
       .insert(linksTable)
       .values({
         link,
         title,
+        visible,
         userId,
       })
       .$returningId();
@@ -52,6 +71,26 @@ exports.addLink = async function ({ userId, link, title }) {
   } catch (err) {
     console.error("Error adding link to user:", err);
     return { success: false, error: err.message }; // Return error object
+  }
+};
+
+exports.updateLinkById = async function (
+  linkId,
+  { title, link, visible = false }
+) {
+  try {
+    await db
+      .update(linksTable)
+      .set({
+        title,
+        link,
+        visible,
+      })
+      .where(eq(linksTable.id, linkId));
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
   }
 };
 

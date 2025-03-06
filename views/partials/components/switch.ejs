@@ -1,0 +1,58 @@
+<script>
+  /**
+   * Custom switch component
+   *
+   * @example
+   * <button id="switch" is="custom-switch" aria-checked="true">
+   * </button>
+   * <script>
+   *  document.querySelector("#switch").addEventListener("onswitch", function (e) {
+   *    console.log(e.detail.checked) // Checked value from switch
+   * })
+   * <\/script>
+   */
+
+  class CustomSwitch extends HTMLButtonElement {
+    constructor() {
+      super();
+    }
+
+    async connectedCallback() {
+      // HTML Setup
+      this.innerHTML = "";
+      this.role = "switch";
+      this.classList.add(
+        ..."group cursor-pointer w-11 h-6 inline-flex border-2 border-transparent rounded-full bg-gray-200 focus:outline-2 outline-indigo-500 outline-offset-2 aria-checked:bg-indigo-500 transition duration-200 ease-in-out".split(
+          " "
+        )
+      );
+
+      // Toggle Setup
+      const innerSpan = document.createElement("span");
+      innerSpan.classList.add(
+        ..."w-5 h-5 rounded-full pointer-events-none bg-white group-aria-checked:translate-x-full transition duration-200 ease-in-out".split(
+          " "
+        )
+      );
+      this.appendChild(innerSpan);
+
+      let checked = this.getAttribute("aria-checked") === "true";
+
+      this.addEventListener("click", function () {
+        checked = !checked;
+        this.setAttribute("aria-checked", checked);
+
+        this.dispatchEvent(
+          new CustomEvent("switch", {
+            bubbles: true,
+            detail: {
+              checked,
+            },
+          })
+        );
+      });
+    }
+  }
+
+  customElements.define("custom-switch", CustomSwitch, { extends: "button" });
+</script>

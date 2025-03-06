@@ -1,0 +1,1 @@
+ALTER TABLE `links` ADD `visible` boolean DEFAULT false NOT NULL;

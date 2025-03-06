@@ -1,0 +1,88 @@
+<form
+  id="update-user-form"
+  method="post"
+  action="/account"
+  aria-expanded="false"
+  class="w-full max-w-xl mx-auto mt-4 pointer-events-none overflow-hidden h-0 opacity-0 aria-expanded:h-auto aria-expanded:opacity-100 aria-expanded:pointer-events-auto transition"
+>
+  <div class="w-full grid grid-cols-2 gap-4 mb-4">
+    <fieldset class="w-full flex flex-col items-start">
+      <label for="name" class="block text-sm text-zinc-600 font-medium mb-1"
+        >Nome</label
+      >
+      <input
+        required
+        type="text"
+        id="name"
+        name="name"
+        value="<%= user.name %>"
+        maxlength="50"
+        class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+      />
+    </fieldset>
+    <fieldset class="w-full flex flex-col items-start">
+      <label for="username" class="block text-sm text-zinc-600 font-medium mb-1"
+        >Usuário</label
+      >
+      <input
+        readonly
+        type="text"
+        id="username"
+        name="username"
+        class="border px-4 py-2 text-zinc-800 rounded bg-zinc-100 border-zinc-300 w-full outline-indigo-500 cursor-not-allowed"
+        value="<%= user.username %>"
+      />
+    </fieldset>
+  </div>
+  <fieldset class="w-full flex flex-col items-start mb-4">
+    <label for="photoUrl" class="block text-sm text-zinc-600 font-medium mb-1"
+      >Url de foto de perfil</label
+    >
+    <input
+      type="url"
+      id="photoUrl"
+      name="photoUrl"
+      maxlength="500"
+      class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+      value="<%= user.photoUrl %>"
+    />
+  </fieldset>
+  <fieldset class="w-full flex flex-col items-start mb-4">
+    <label
+      for="description"
+      class="block text-sm text-zinc-600 font-medium mb-1"
+      >Descrição</label
+    >
+    <input
+      type="text"
+      id="description"
+      name="description"
+      maxlength="50"
+      class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+      value="<%= user.description %>"
+    />
+  </fieldset>
+  <div class="mt-2 mb-4 flex items-center justify-end gap-4">
+    <button
+      id="close-user-form-button"
+      type="button"
+      class="h-10 box-border text-red-500 cursor-pointer font-medium text-center py-2 rounded border border-red-500 bg-transparent hover:bg-red-100 transition px-4"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="h-10 text-white cursor-pointer font-medium text-center py-2 rounded bg-indigo-500 hover:bg-indigo-800 transition px-6"
+    >
+      Salvar
+    </button>
+  </div>
+  <script>
+    const form = document.querySelector("#update-user-form");
+    document
+      .querySelector("#close-user-form-button")
+      .addEventListener("click", function () {
+        form.setAttribute("aria-expanded", "false");
+      });
+  </script>
+</form>

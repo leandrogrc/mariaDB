@@ -16,23 +16,19 @@
   >
     <section class="mb-8 w-full max-w-2xl">
       <img
-        <% if (user.profileUrl) { %>
-          src="<%= user.profileUrl %>"
-        <% } else { %>
-          src="https://ui-avatars.com/api/?name=<%= user.name.replace(/\s/g, "+") %>"
-        <% } %>
+        src="<%= user.photoUrl ? user.photoUrl : `https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}`%>"
         class="rounded-full w-32 mb-4 mx-auto"
       />
       <p class="text-center">
         <span class="font-medium"><%= user.name %></span>
         <br />
-        <span class="font-thin"><%= user.title %></span>
+        <span class="font-thin"><%= user.description %></span>
       </p>
     </section>
     <section class="w-full max-w-md px-5">
       <% links.forEach(function (link) { %>
       <a
-        href="<%= link.url %>"
+        href="<%= link.link %>"
         class="w-full block text-center border border-white group mb-6 cursor-pointer"
       >
         <div

@@ -3,11 +3,15 @@ const {
   int,
   varchar,
   datetime,
+  boolean,
 } = require("drizzle-orm/mysql-core");
 
 const usersTable = mysqlTable("users", {
   id: int("id").primaryKey().notNull().autoincrement(),
-  username: varchar("username", { length: 100 })
+  name: varchar("name", { length: 50 }).notNull(),
+  photoUrl: varchar("photo_url", { length: 500 }),
+  description: varchar("description", { length: 50 }),
+  username: varchar("username", { length: 25 })
     .notNull()
     .unique("unique_username"),
   password: varchar("password", { length: 255 }).notNull(),
@@ -20,6 +24,7 @@ const linksTable = mysqlTable("links", {
     .references(() => usersTable.id),
   title: varchar("title", { length: 255 }).notNull(),
   link: varchar("link", { length: 255 }).notNull(),
+  visible: boolean("visible").default(false).notNull(),
 });
 
 const sessionsTable = mysqlTable("sessions", {

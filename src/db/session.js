@@ -25,6 +25,15 @@ exports.createSession = async function (userId) {
   }
 };
 
+exports.removeSession = async function (sessionId) {
+  try {
+    await db.delete(sessionsTable).where(eq(sessionsTable.id, sessionId));
+    return { success: true };
+  } catch (error) {
+    return { success: false, result: error.message };
+  }
+};
+
 exports.validateSession = async function (sessionId) {
   try {
     const now = dayjs().utc();
@@ -42,7 +51,10 @@ exports.validateSession = async function (sessionId) {
     const [user] = await db
       .select({
         id: usersTable.id,
+        name: usersTable.name,
         username: usersTable.username,
+        description: usersTable.description,
+        photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)
       .where(eq(usersTable.id, session.userId))

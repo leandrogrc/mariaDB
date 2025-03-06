@@ -19,13 +19,20 @@ exports.getAllUsers = async function () {
   }
 };
 
-exports.getUserByName = async function (username) {
+exports.getUserByUsername = async function (username, showPassword = false) {
   try {
     const [user] = await db
       .select({
         id: usersTable.id,
+        name: usersTable.name,
         username: usersTable.username,
-        password: usersTable.password,
+        ...(showPassword
+          ? {
+              password: usersTable.password,
+            }
+          : {}),
+        description: usersTable.description,
+        photoUrl: usersTable.photoUrl,
       })
       .from(usersTable)
       .where(eq(usersTable.username, username))
@@ -69,7 +76,13 @@ exports.getUserLinks = async function (username) {
   }
 };
 
-exports.createUser = async function ({ username, password }) {
+exports.createUser = async function ({
+  name,
+  username,
+  password,
+  photoUrl = null,
+  description = null,
+}) {
   try {
     const [userAlreadyExists] = await db
       .select()
@@ -87,8 +100,11 @@ exports.createUser = async function ({ username, password }) {
     const [{ id }] = await db
       .insert(usersTable)
       .values({
+        name,
         username,
         password,
+        photoUrl,
+        description,
       })
       .$returningId();
 
@@ -98,10 +114,32 @@ exports.createUser = async function ({ username, password }) {
       .where(eq(usersTable.id, id))
       .limit(1);
 
-    return { success: true, result: newUser };
+    return { success: true, response: newUser };
   } catch (err) {
     console.error("Error:", err);
     return { success: false, error: err.message };
+  }
+};
+
+exports.updateUserById = async function (
+  userId,
+  { name, photoUrl = null, description = null }
+) {
+  try {
+    await db
+      .update(usersTable)
+      .set({
+        name,
+        photoUrl,
+        description,
+      })
+      .where(eq(usersTable.id, userId))
+      .limit(1);
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: error.message };
   }
 };
 

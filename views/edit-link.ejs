@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <title>Editar link</title>
+    <%- include('partials/components/switch.ejs') %>
+  </head>
+  <body class="bg-zinc-100 min-h-full min-h-screen">
+    <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
+      <section
+        class="relative bg-white p-4 rounded-lg border border-zinc-300 flex items-center justify-between"
+      >
+        <form
+          method="post"
+          action="<%= `/account/link/${link.id}/update` %>"
+          class="w-full max-w-xl mx-auto"
+        >
+          <h1 class="text-black text-3xl font-medium mb-6">Editar link</h1>
+          <fieldset class="w-full flex flex-col items-start mb-4">
+            <label
+              for="title"
+              class="block text-sm text-zinc-600 font-medium mb-1"
+              >Título</label
+            >
+            <input
+              required
+              type="text"
+              id="title"
+              name="title"
+              maxlength="255"
+              value="<%= link.title %>"
+              class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+            />
+          </fieldset>
+          <fieldset class="w-full flex flex-col items-start mb-4">
+            <label
+              for="link"
+              class="block text-sm text-zinc-600 font-medium mb-1"
+              >Url</label
+            >
+            <input
+              type="url"
+              id="link"
+              name="link"
+              maxlength="255"
+              value="<%= link.link %>"
+              class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+            />
+          </fieldset>
+          <div class="mb-4">
+            <label
+              for="visible"
+              class="block text-sm text-zinc-600 font-medium mb-2"
+              >Ativo</label
+            >
+            <div>
+              <input id="visible" name="visible" type="checkbox" hidden />
+              <button
+                id="visible-switch"
+                is="custom-switch"
+                type="button"
+                aria-checked="<%= link.visible %>"
+              ></button>
+              <script>
+                const defaultChecked = <%= link.visible %>
+                const visible = document.querySelector("#visible");
+
+                if (defaultChecked) {
+                  visible.checked = true
+                }
+
+                document
+                  .querySelector("#visible-switch")
+                  .addEventListener("switch", function (e) {
+                    visible.checked = e.detail.checked;
+                  });
+              </script>
+            </div>
+          </div>
+          <div class="mt-2 mb-4 flex items-center justify-end gap-4">
+            <a
+              href="/account"
+              class="h-10 box-border text-red-500 cursor-pointer font-medium text-center py-2 rounded border border-red-500 bg-transparent hover:bg-red-100 transition px-4"
+            >
+              Cancelar
+            </a>
+            <button
+              type="submit"
+              class="h-10 text-white cursor-pointer font-medium text-center py-2 rounded bg-indigo-500 hover:bg-indigo-800 transition px-6"
+            >
+              Editar
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>
