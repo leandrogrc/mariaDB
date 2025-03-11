@@ -45,19 +45,31 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.loginPage = async (_req, res) => {
-  return res.render("login", { username: "", error: "" });
+exports.loginPage = async (req, res) => {
+  const csrf = req.csrf();
+  return res.render("login", {
+    action: "/login",
+    csrf,
+    username: "",
+    error: "",
+  });
 };
 
 exports.register = async (req, res) => {
+  const csrf = req.csrf();
   const { name, username, password, confirmPassword } = req.body;
-  if (!name || !username || !password || !confirmPassword)
-    return res
-      .status(400)
-      .render("register", { error: "Alguns dados estão faltando" });
+  if (!name || !username || !password || !confirmPassword) {
+    return res.status(400).render("register", {
+      csrf,
+      name: "",
+      username: "",
+      error: "Alguns dados estão faltando",
+    });
+  }
 
   if (password !== confirmPassword) {
     return res.status(400).render("register", {
+      csrf,
       name,
       username,
       error: "Senha e confirmação devem ser o mesmo",
@@ -68,6 +80,7 @@ exports.register = async (req, res) => {
     const alreadyExists = await getUserByUsername(username);
     if (alreadyExists.success) {
       return res.render("register", {
+        csrf,
         name,
         username,
         error: "Usuário já cadastrado",
@@ -94,6 +107,7 @@ exports.register = async (req, res) => {
       return res.status(200).redirect("/account");
     } else {
       return res.status(500).render("register", {
+        csrf,
         name,
         username,
         error: "Não foi possível criar usuário",
@@ -105,8 +119,14 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.registerPage = async (_req, res) => {
-  return res.render("register", { name: "", username: "", error: "" });
+exports.registerPage = async (req, res) => {
+  const csrf = req.csrf();
+  return res.render("register", {
+    csrf,
+    name: "",
+    username: "",
+    error: "",
+  });
 };
 
 exports.logout = async (req, res) => {

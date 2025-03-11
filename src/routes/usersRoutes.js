@@ -6,11 +6,12 @@ const {
   updateUser,
 } = require("../controllers/usersControllers");
 const validateSession = require("../middlewares/validateSession");
+const csrf = require("../middlewares/csrf");
 
 router.use(validateSession);
 
 router.get("/", getUsers);
-router.route("/account").get(getUserPanel).post(updateUser);
+router.route("/account").get(getUserPanel).post(csrf.validate, updateUser);
 
 // router.route("/:username").delete(delUser).get(getUserByUsername);
 

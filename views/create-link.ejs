@@ -18,6 +18,7 @@
           action="/account/link"
           class="w-full max-w-xl mx-auto"
         >
+          <input hidden type="text" name="csrf" value="<%= csrf %>" />
           <h1 class="text-black text-3xl font-medium mb-6">Criar link</h1>
           <fieldset class="w-full flex flex-col items-start mb-4">
             <label

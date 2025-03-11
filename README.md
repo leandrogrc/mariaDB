@@ -42,6 +42,7 @@ Para testar o projeto localmente você precisa:
 2. Copar e alterar o arquivo `.env.example` para `.env`:
   ```env
   PORT=5000
+  APP_DOMAIN=
   COOKIE_SECRET=your-secret
   DATABASE_URL=mysql://root:root@localhost:3306/projeto
   ```
@@ -59,7 +60,7 @@ Para testar o projeto localmente você precisa:
   ```
 5. Iniciar o projeto:
 ```bash
-npm run start
+npm run dev
 ```
 
 ---
@@ -74,7 +75,7 @@ npm run start
   - [ ] Deleção de usuário
   - [ ] Confirmar conta
   - [ ] Recuperar conta
-- [ ] Links
+- [x] Links
   - [x] Criação de links
   - [x] Deleção de links
   - [x] Listagem de links

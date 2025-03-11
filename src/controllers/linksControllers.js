@@ -18,7 +18,8 @@ const getLinks = async (req, res) => {
 };
 
 const getCreateLinkPage = async (req, res) => {
-  return res.status(200).render("create-link");
+  const csrf = req.csrf();
+  return res.status(200).render("create-link", { csrf });
 };
 
 const postLink = async (req, res) => {
@@ -52,7 +53,10 @@ const getUpdateLinkPage = async (req, res) => {
     const linkExists = await getLinkById(req.params.id);
 
     if (linkExists.success && linkExists.data?.userId === req.user.id) {
-      return res.status(200).render("edit-link", { link: linkExists.data });
+      const csrf = req.csrf();
+      return res
+        .status(200)
+        .render("edit-link", { link: linkExists.data, csrf });
     }
 
     return res.status(400).render("not-found");

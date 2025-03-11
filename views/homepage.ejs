@@ -27,9 +27,9 @@
           <span class="mr-1">@<%= user.username %></span>
           <i data-feather="external-link" class="inline w-4 h-4"></i>
         </a>
-        <%- include('partials/update-user-form.ejs') %>
+        <%- include('partials/update-user-form.ejs', { csrf }) %>
         <div class="absolute top-0 right-0 mt-4 mr-4">
-          <%- include('partials/user-dropdown.ejs') %>
+          <%- include('partials/user-dropdown.ejs', { csrf }) %>
         </div>
       </section>
       <div class="flex items-center justify-between mb-6">
@@ -70,7 +70,7 @@
               >
             </div>
           </div>
-          <%- include('partials/link-dropdown.ejs', { link }) %>
+          <%- include('partials/link-dropdown.ejs', { link, csrf }) %>
         </article>
         <% }) %>
       </section>

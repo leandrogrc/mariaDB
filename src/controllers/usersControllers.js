@@ -9,10 +9,12 @@ const { getLinksByUserId } = require("../db/links");
 
 exports.getUserPanel = async (req, res) => {
   try {
+    const csrf = req.csrf();
     const links = await getLinksByUserId(req.user.id);
     return res.render("homepage", {
       user: req.user,
       links: links.data,
+      csrf,
     });
   } catch (error) {
     console.error(error);
