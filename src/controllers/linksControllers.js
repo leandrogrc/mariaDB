@@ -12,7 +12,7 @@ const getCreateLinkPage = async (req, res) => {
 
 const postLink = async (req, res) => {
   const userId = req.user.id;
-  const { title, link, visible = false } = req.body;
+  const { title, link, active = false } = req.body;
 
   if (!userId || !link || !title) {
     return res.status(400).render("error");
@@ -23,7 +23,7 @@ const postLink = async (req, res) => {
       userId,
       link,
       title,
-      visible: visible === "on",
+      active: active === "on",
     });
     if (result.success) {
       return res.status(200).redirect("/account");
@@ -55,14 +55,14 @@ const getUpdateLinkPage = async (req, res) => {
 
 const updateLink = async (req, res) => {
   try {
-    const { title, link, visible = false } = req.body;
+    const { title, link, active = false } = req.body;
     const linkExists = await getLinkById(req.params.id);
 
     if (linkExists.success && linkExists.data?.userId === req.user.id) {
       await updateLinkById(req.params.id, {
         title,
         link,
-        visible: visible === "on",
+        active: active === "on",
       });
 
       return res.status(200).redirect("/account");

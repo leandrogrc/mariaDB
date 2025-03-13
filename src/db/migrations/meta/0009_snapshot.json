@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "f82da52a-5718-405b-bba6-0a0e319d40f2",
-  "prevId": "19145ba5-1eeb-46ac-b576-2a295fc0d37c",
+  "id": "33a20bb9-7c80-42d1-b147-5f9b9e921ea9",
+  "prevId": "f82da52a-5718-405b-bba6-0a0e319d40f2",
   "tables": {
     "users": {
       "name": "users",
@@ -117,8 +117,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "visible": {
-          "name": "visible",
+        "active": {
+          "name": "active",
           "type": "boolean",
           "primaryKey": false,
           "notNull": true,
@@ -225,7 +225,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"links\".\"visible\"": "\"links\".\"active\""
+    }
   },
   "internal": {
     "tables": {},

@@ -6,20 +6,20 @@ const { linksTable } = require("./schema");
 exports.getAllLinks = async function () {
   try {
     const links = await db
-      .select({ visible: linksTable.visible, count: count() })
+      .select({ active: linksTable.active, count: count() })
       .from(linksTable)
-      .groupBy(linksTable.visible);
+      .groupBy(linksTable.active);
 
-    const visibleLinks = links.find(({ visible }) => visible)?.count ?? 0;
-    const invisibleLinks = links.find(({ visible }) => !visible)?.count ?? 0;
+    const activeLinks = links.find(({ active }) => active)?.count ?? 0;
+    const inactiveLinks = links.find(({ active }) => !active)?.count ?? 0;
 
-    return { success: true, visibleLinks, invisibleLinks };
+    return { success: true, activeLinks, inactiveLinks };
   } catch (error) {
     return {
       success: false,
       error: error.message,
-      visibleLinks: 0,
-      invisibleLinks: 0,
+      activeLinks: 0,
+      inactiveLinks: 0,
     };
   }
 };
@@ -31,10 +31,10 @@ exports.getLinksByUserId = async function (userId, getActiveLinks = false) {
       .from(linksTable)
       .where(
         getActiveLinks
-          ? and(eq(linksTable.userId, userId), eq(linksTable.visible, true))
+          ? and(eq(linksTable.userId, userId), eq(linksTable.active, true))
           : eq(linksTable.userId, userId)
       )
-      .orderBy(desc(linksTable.visible), desc(linksTable.createdAt));
+      .orderBy(desc(linksTable.active), desc(linksTable.createdAt));
 
     return { success: true, data: links };
   } catch (error) {
@@ -62,14 +62,14 @@ exports.getLinkById = async function (linkId) {
   }
 };
 
-exports.createLink = async function ({ userId, link, title, visible = false }) {
+exports.createLink = async function ({ userId, link, title, active = false }) {
   try {
     const { id } = await db
       .insert(linksTable)
       .values({
         link,
         title,
-        visible,
+        active,
         userId,
       })
       .$returningId();
@@ -89,7 +89,7 @@ exports.createLink = async function ({ userId, link, title, visible = false }) {
 
 exports.updateLinkById = async function (
   linkId,
-  { title, link, visible = false }
+  { title, link, active = false }
 ) {
   try {
     await db
@@ -97,7 +97,7 @@ exports.updateLinkById = async function (
       .set({
         title,
         link,
-        visible,
+        active,
       })
       .where(eq(linksTable.id, linkId));
 

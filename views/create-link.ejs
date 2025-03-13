@@ -52,25 +52,25 @@
           </fieldset>
           <div class="mb-4">
             <label
-              for="visible"
+              for="active"
               class="block text-sm text-zinc-600 font-medium mb-2"
               >Ativo</label
             >
             <div>
-              <input id="visible" name="visible" type="checkbox" hidden />
+              <input id="active" name="active" type="checkbox" hidden />
               <button
-                id="visible-switch"
+                id="active-switch"
                 is="custom-switch"
                 type="button"
                 aria-checked="false"
               ></button>
               <script>
-                const visible = document.querySelector("#visible");
+                const active = document.querySelector("#active");
 
                 document
-                  .querySelector("#visible-switch")
+                  .querySelector("#active-switch")
                   .addEventListener("switch", function (e) {
-                    visible.checked = e.detail.checked;
+                    active.checked = e.detail.checked;
                   });
               </script>
             </div>

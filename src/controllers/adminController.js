@@ -15,7 +15,7 @@ exports.adminPage = async (req, res) => {
   const csrf = req.csrf();
   try {
     const stats = await getUsersStats();
-    const { visibleLinks, invisibleLinks } = await getAllLinks();
+    const { activeLinks, inactiveLinks } = await getAllLinks();
     const { users } = await getAllUsers();
 
     return res.render("admin", {
@@ -24,8 +24,8 @@ exports.adminPage = async (req, res) => {
       stats: {
         admins: stats.admins,
         users: stats.users,
-        visibleLinks,
-        invisibleLinks,
+        activeLinks,
+        inactiveLinks,
       },
       users,
     });

@@ -18,7 +18,7 @@ const usersTable = mysqlTable("users", {
     .notNull()
     .unique("unique_username"),
   password: varchar("password", { length: 255 }).notNull(),
-  createdAt: datetime()
+  createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
@@ -30,8 +30,8 @@ const linksTable = mysqlTable("links", {
     .references(() => usersTable.id),
   title: varchar("title", { length: 255 }).notNull(),
   link: varchar("link", { length: 255 }).notNull(),
-  visible: boolean("visible").default(false).notNull(),
-  createdAt: datetime()
+  active: boolean("active").default(false).notNull(),
+  createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
