@@ -41,26 +41,20 @@ exports.getUserPage = async (req, res) => {
   }
 };
 
-// GET all users
 exports.getUsers = async (req, res) => {
   try {
-    const result = await getAllUsers();
-    res.status(200).json({ message: "Users fetched", users: result.users });
-  } catch (err) {
-    console.error("Error getting users:", err);
-    return res.status(500).json({ error: "Failed to fetch users" });
-  }
-};
+    const { name = undefined, username = undefined, limit = 10 } = req.query;
 
-// GET single user
-exports.getUserByUsername = async (req, res) => {
-  const { username } = req.params;
-  try {
-    const result = await getUserLinks(username);
-    res.status(200).json({ message: "Users fetched", users: result.response });
+    const result = await getAllUsers({
+      name,
+      username,
+      limit,
+    });
+
+    return res.render("partials/users-list-rows", { users: result.users });
   } catch (err) {
     console.error("Error getting users:", err);
-    return res.status(500).json({ error: "Failed to fetch users" });
+    return res.render("error");
   }
 };
 
@@ -80,17 +74,5 @@ exports.updateUser = async (req, res) => {
     return res.status(200).redirect("/account");
   } catch (error) {
     return res.status(500).render("error");
-  }
-};
-
-// DELETE a user
-exports.delUser = async (req, res) => {
-  const { username } = req.params;
-  try {
-    await deleteUserByUsername(username);
-    return res.status(200).json({ message: "All users deleted!" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to delete all users" });
   }
 };

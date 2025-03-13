@@ -1,4 +1,4 @@
-const { eq, count, sql, desc } = require("drizzle-orm");
+const { eq, count, sql, desc, like, and } = require("drizzle-orm");
 
 const { db } = require(".");
 const { usersTable, linksTable } = require("./schema");
@@ -38,8 +38,24 @@ exports.getUsersStats = async function () {
   }
 };
 
-exports.getAllUsers = async function () {
+exports.getAllUsers = async function ({
+  name = undefined,
+  username = undefined,
+  page = 1,
+  limit = 20,
+} = {}) {
   try {
+    const filters = [];
+    filters.push(eq(usersTable.type, "user"));
+
+    if (name) {
+      filters.push(like(usersTable.name, `%${name.toLowerCase()}%`));
+    }
+
+    if (username) {
+      filters.push(like(usersTable.username, `%${username.toLowerCase()}%`));
+    }
+
     const users = await db
       .select({
         id: usersTable.id,
@@ -52,8 +68,9 @@ exports.getAllUsers = async function () {
           .where(eq(linksTable.userId, usersTable.id))})`.mapWith(Number),
       })
       .from(usersTable)
-      .where(eq(usersTable.type, "user"))
-      .orderBy(desc(usersTable.createdAt));
+      .where(and(...filters))
+      .orderBy(desc(usersTable.createdAt))
+      .limit(limit);
 
     return { success: true, users };
   } catch (err) {

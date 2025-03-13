@@ -1,0 +1,25 @@
+<% if (!users.length) { %>
+<tr>
+  <td
+    colspan="4"
+    class="text-center py-4 text-zinc-600 border-b border-zinc-200"
+  >
+    Nenhum usuário encontrado
+  </td>
+</tr>
+<% } %> <% users.forEach(function (user) { %>
+<tr class="border-b border-zinc-200 hover:bg-zinc-100 transition">
+  <td class="py-4 flex items-center">
+    <img
+      src="<%= user.photoUrl ? user.photoUrl : `https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}`%>"
+      class="rounded-full w-8 ml-2 mr-4"
+    />
+    <span><%= user.username %></span>
+  </td>
+  <td class="py-4"><%= user.name %></td>
+  <td class="py-4"><%= user.links %></td>
+  <td>
+    <i data-feather="more-vertical" class="w-5 h-5 mx-auto"></i>
+  </td>
+</tr>
+<% }) %>

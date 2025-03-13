@@ -13,6 +13,4 @@ router.use(validateSession);
 router.get("/", getUsers);
 router.route("/account").get(getUserPanel).post(csrf.validate, updateUser);
 
-// router.route("/:username").delete(delUser).get(getUserByUsername);
-
 module.exports = router;

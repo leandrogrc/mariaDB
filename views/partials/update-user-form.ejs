@@ -79,11 +79,12 @@
     </button>
   </div>
   <script>
-    const form = document.querySelector("#update-user-form");
+    const updateUserForm = document.querySelector("#update-user-form");
+
     document
       .querySelector("#close-user-form-button")
       .addEventListener("click", function () {
-        form.setAttribute("aria-expanded", "false");
+        updateUserForm.setAttribute("aria-expanded", "false");
       });
   </script>
 </form>
