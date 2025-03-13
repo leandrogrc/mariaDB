@@ -1,14 +1,26 @@
-const { eq, and } = require("drizzle-orm");
+const { eq, and, count, desc } = require("drizzle-orm");
 
 const { db } = require(".");
 const { linksTable } = require("./schema");
 
 exports.getAllLinks = async function () {
   try {
-    const links = await db.select().from(linksTable);
-    return { success: true, response: links };
+    const links = await db
+      .select({ visible: linksTable.visible, count: count() })
+      .from(linksTable)
+      .groupBy(linksTable.visible);
+
+    const visibleLinks = links.find(({ visible }) => visible)?.count ?? 0;
+    const invisibleLinks = links.find(({ visible }) => !visible)?.count ?? 0;
+
+    return { success: true, visibleLinks, invisibleLinks };
   } catch (error) {
-    return { success: false, error: error.message };
+    return {
+      success: false,
+      error: error.message,
+      visibleLinks: 0,
+      invisibleLinks: 0,
+    };
   }
 };
 
@@ -21,7 +33,8 @@ exports.getLinksByUserId = async function (userId, getActiveLinks = false) {
         getActiveLinks
           ? and(eq(linksTable.userId, userId), eq(linksTable.visible, true))
           : eq(linksTable.userId, userId)
-      );
+      )
+      .orderBy(desc(linksTable.visible), desc(linksTable.createdAt));
 
     return { success: true, data: links };
   } catch (error) {

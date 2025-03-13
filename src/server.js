@@ -8,6 +8,7 @@ const app = express();
 const linksRouter = require("./routes/linksRoutes");
 const usersRouter = require("./routes/usersRoutes");
 const authRouter = require("./routes/authRoutes");
+const adminRouter = require("./routes/adminRoutes");
 const csrf = require("./middlewares/csrf");
 
 app.use(
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(csrf.middleware);
 
 app.use(authRouter);
+app.use(adminRouter);
 app.use(linksRouter);
 app.use(usersRouter);
 

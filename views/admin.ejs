@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" href="data:," />
+    <title>Painel Admin</title>
+    <%- include('partials/components/dropdown.ejs') %>
+  </head>
+  <body class="bg-zinc-100 min-h-full min-h-screen">
+    <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
+      <header
+        class="bg-white relative px-4 py-2 rounded border border-zinc-300 text-center mb-6 flex items-center justify-between"
+      >
+        <h1 class="text-lg font-medium">Painel Admin</h1>
+        <div><%- include('partials/admin-dropdown.ejs') %></div>
+      </header>
+      <section
+        class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
+      >
+        <h1 class="text-black text-xl font-medium mt-4 mb-6">Editar Admin</h1>
+        <%- include('partials/update-user-form.ejs') %>
+      </section>
+      <h1 class="text-black text-xl font-medium mb-6">Estatísticas</h1>
+      <section
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+      >
+        <article
+          class="bg-white relative p-4 rounded border border-zinc-300 text-center flex items-center justify-between"
+        >
+          <div class="text-left">
+            <small class="uppercase text-sm font-light">Admins</small>
+            <h2 class="text-3xl font-medium"><%= stats.admins %></h2>
+          </div>
+          <div
+            class="w-12 h-12 rounded-full bg-sky-200 flex items-center justify-center"
+          >
+            <i data-feather="shield" class="w-5 h-5 text-sky-800"></i>
+          </div>
+        </article>
+        <article
+          class="bg-white relative p-4 rounded border border-zinc-300 text-center flex items-center justify-between"
+        >
+          <div class="text-left">
+            <small class="uppercase text-sm font-light">Usuários</small>
+            <h2 class="text-3xl font-medium"><%= stats.users %></h2>
+          </div>
+          <div
+            class="w-12 h-12 rounded-full bg-orange-200 flex items-center justify-center"
+          >
+            <i data-feather="users" class="w-5 h-5 text-orange-800"></i>
+          </div>
+        </article>
+        <article
+          class="bg-white p-4 rounded border border-zinc-300 text-center flex items-center justify-between"
+        >
+          <div class="text-left">
+            <small class="uppercase text-sm font-light">Links Ativos</small>
+            <h2 class="text-3xl font-medium"><%= stats.visibleLinks %></h2>
+          </div>
+          <div
+            class="w-12 h-12 rounded-full bg-indigo-200 flex items-center justify-center"
+          >
+            <i data-feather="external-link" class="w-5 h-5 text-indigo-800"></i>
+          </div>
+        </article>
+        <article
+          class="bg-white p-4 rounded border border-zinc-300 text-center flex items-center justify-between"
+        >
+          <div class="text-left">
+            <small class="uppercase text-sm font-light">Links Inativos</small>
+            <h2 class="text-3xl font-medium"><%= stats.invisibleLinks %></h2>
+          </div>
+          <div
+            class="w-12 h-12 rounded-full bg-red-200 flex items-center justify-center"
+          >
+            <i data-feather="eye-off" class="w-5 h-5 text-red-800"></i>
+          </div>
+        </article>
+      </section>
+      <section class="bg-white p-4 rounded border border-zinc-300">
+        <h1 class="text-black text-xl font-medium mb-6">Usuários</h1>
+        <%- include('partials/users-table.ejs') %>
+      </section>
+    </main>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>

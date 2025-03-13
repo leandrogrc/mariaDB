@@ -1,21 +1,9 @@
 const {
   createLink,
   delLink,
-  getAllLinks,
   getLinkById,
   updateLinkById,
 } = require("../db/links");
-
-// GET all links
-const getLinks = async (req, res) => {
-  try {
-    const result = await getAllLinks();
-    res.status(200).json({ response: result.response });
-  } catch (err) {
-    console.error("Error in getLinks:", err);
-    return res.status(500).json({ error: "Failed to fetch links" });
-  }
-};
 
 const getCreateLinkPage = async (req, res) => {
   const csrf = req.csrf();
@@ -104,7 +92,6 @@ const deleteLink = async (req, res) => {
 };
 
 module.exports = {
-  getLinks,
   getCreateLinkPage,
   postLink,
   getUpdateLinkPage,

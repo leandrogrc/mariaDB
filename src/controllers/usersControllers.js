@@ -9,6 +9,10 @@ const { getLinksByUserId } = require("../db/links");
 
 exports.getUserPanel = async (req, res) => {
   try {
+    if (req.user.type === "admin") {
+      return res.status(200).redirect("/admin");
+    }
+
     const csrf = req.csrf();
     const links = await getLinksByUserId(req.user.id);
     return res.render("homepage", {
@@ -26,7 +30,7 @@ exports.getUserPage = async (req, res) => {
   const { username } = req.params;
   try {
     const user = await getUserByUsername(username);
-    if (!user.response?.id) {
+    if (!user.response?.id || user.response?.type !== "user") {
       return res.status(400).render("user-not-found", { username });
     }
     const links = await getLinksByUserId(user.response.id, true);
@@ -68,6 +72,10 @@ exports.updateUser = async (req, res) => {
       photoUrl: photoUrl || null,
       description: description || null,
     });
+
+    if (req.user.type === "admin") {
+      return res.status(200).redirect("/admin");
+    }
 
     return res.status(200).redirect("/account");
   } catch (error) {

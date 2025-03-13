@@ -31,6 +31,10 @@ exports.login = async (req, res) => {
           maxAge: 1000 * 60 * 60,
         });
 
+        if (result.response.type === "admin") {
+          return res.status(200).redirect("/admin");
+        }
+
         return res.status(200).redirect("/account");
       }
     }

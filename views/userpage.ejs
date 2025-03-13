@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="icon" href="data:,">
     <title><%= user.name %></title>
     <style>
       body {
@@ -22,14 +23,14 @@
       <p class="text-center">
         <span class="font-medium"><%= user.name %></span>
         <br />
-        <span class="font-thin"><%= user.description %></span>
+        <span class="font-light"><%= user.description %></span>
       </p>
     </section>
     <section class="w-full max-w-md px-5">
       <% links.forEach(function (link) { %>
       <a
         href="<%= link.link %>"
-        class="w-full block text-center border border-white group mb-6 cursor-pointer"
+        class="w-full block text-center border border-white group mb-6"
       >
         <div
           class="w-full block px-4 py-2 w-full bg-white text-black group-hover:-translate-y-[10px] group-hover:-translate-x-[8px] group-hover transition ease-out"

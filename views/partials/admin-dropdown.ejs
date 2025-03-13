@@ -1,12 +1,10 @@
 <custom-dropdown aria-expanded="false">
   <div>
-    <button
-      id="user-dropdown-trigger"
-      is="custom-dropdown-trigger"
-      class="cursor-pointer text-white rounded flex items-center py-2 bg-indigo-500 hover:bg-indigo-800 transition px-6"
-    >
-      <i data-feather="settings" class="w-4 h-4 mr-2"></i>
-      Configurações
+    <button id="user-dropdown-trigger" is="custom-dropdown-trigger" class="p-1">
+      <img
+        src="<%= user.photoUrl ? user.photoUrl : `https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}`%>"
+        class="rounded-full w-10 mx-auto"
+      />
     </button>
   </div>
   <custom-dropdown-content>
@@ -24,6 +22,14 @@
         <i data-feather="lock" class="w-4 h-4 mr-2"></i>
         Alterar senha
       </button>
+      <a
+        id="edit-user-button"
+        class="cursor-default flex items-center rounded mx-1 px-2 py-2 text-sm text-gray-800 hover:bg-zinc-100 transition"
+        href="/admin/new"
+      >
+        <i data-feather="shield" class="w-4 h-4 mr-2"></i>
+        Adicionar admin
+      </a>
       <form method="post" action="<%= `/logout` %>" class="w-full px-1">
         <input hidden type="text" name="csrf" value="<%= csrf %>" />
         <button
@@ -46,6 +52,7 @@
       const editUserForm = document.querySelector("#update-user-form");
 
       dropdownTrigger.click();
+
       editUserForm.setAttribute("aria-expanded", "true");
     });
 </script>

@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" href="data:,">
     <title>Editar link</title>
     <%- include('partials/components/switch.ejs') %>
   </head>
   <body class="bg-zinc-100 min-h-full min-h-screen">
     <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
       <section
-        class="relative bg-white p-4 rounded-lg border border-zinc-300 flex items-center justify-between"
+        class="bg-white px-4 rounded border border-zinc-300 flex items-center justify-between"
       >
         <form
           method="post"
           action="<%= `/account/link/${link.id}/update` %>"
-          class="w-full max-w-xl mx-auto"
+          class="w-full mx-auto"
         >
-          <h1 class="text-black text-3xl font-medium mb-6">Editar link</h1>
+          <h1 class="text-black text-xl font-medium mt-4 mb-6">Editar link</h1>
           <input hidden type="text" name="csrf" value="<%= csrf %>" />
           <fieldset class="w-full flex flex-col items-start mb-4">
             <label

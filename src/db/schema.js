@@ -1,9 +1,11 @@
+const { sql } = require("drizzle-orm");
 const {
   mysqlTable,
   int,
   varchar,
   datetime,
   boolean,
+  mysqlEnum,
 } = require("drizzle-orm/mysql-core");
 
 const usersTable = mysqlTable("users", {
@@ -11,10 +13,14 @@ const usersTable = mysqlTable("users", {
   name: varchar("name", { length: 50 }).notNull(),
   photoUrl: varchar("photo_url", { length: 500 }),
   description: varchar("description", { length: 50 }),
+  type: mysqlEnum("type", ["user", "admin"]).default("user"),
   username: varchar("username", { length: 25 })
     .notNull()
     .unique("unique_username"),
   password: varchar("password", { length: 255 }).notNull(),
+  createdAt: datetime()
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 const linksTable = mysqlTable("links", {
@@ -25,6 +31,9 @@ const linksTable = mysqlTable("links", {
   title: varchar("title", { length: 255 }).notNull(),
   link: varchar("link", { length: 255 }).notNull(),
   visible: boolean("visible").default(false).notNull(),
+  createdAt: datetime()
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 const sessionsTable = mysqlTable("sessions", {

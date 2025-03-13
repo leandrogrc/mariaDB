@@ -1,7 +1,42 @@
-const { eq } = require("drizzle-orm");
+const { eq, count, sql, desc } = require("drizzle-orm");
 
 const { db } = require(".");
 const { usersTable, linksTable } = require("./schema");
+
+exports.hasAdmin = async function () {
+  try {
+    const [{ admins }] = await db
+      .select({
+        admins: count(),
+      })
+      .from(usersTable)
+      .where(eq(usersTable.type, "admin"))
+      .limit(1);
+
+    return { success: true, result: admins > 0 };
+  } catch (error) {
+    return { success: false, result: false };
+  }
+};
+
+exports.getUsersStats = async function () {
+  try {
+    const rows = await db
+      .select({
+        type: usersTable.type,
+        count: count(),
+      })
+      .from(usersTable)
+      .groupBy(usersTable.type);
+
+    const users = rows.find(({ type }) => type === "user")?.count ?? 0;
+    const admins = rows.find(({ type }) => type === "admin")?.count ?? 0;
+
+    return { success: true, users, admins };
+  } catch (error) {
+    return { success: false, users: 0, admins: 0 };
+  }
+};
 
 exports.getAllUsers = async function () {
   try {
@@ -9,13 +44,21 @@ exports.getAllUsers = async function () {
       .select({
         id: usersTable.id,
         username: usersTable.username,
+        name: usersTable.name,
+        photoUrl: usersTable.photoUrl,
+        links: sql`(${db
+          .select({ count: count() })
+          .from(linksTable)
+          .where(eq(linksTable.userId, usersTable.id))})`.mapWith(Number),
       })
-      .from(usersTable);
+      .from(usersTable)
+      .where(eq(usersTable.type, "user"))
+      .orderBy(desc(usersTable.createdAt));
 
     return { success: true, users };
   } catch (err) {
     console.error("Error:", err);
-    return { success: false, error: err.message };
+    return { success: false, error: err.message, users: [] };
   }
 };
 
@@ -26,6 +69,7 @@ exports.getUserByUsername = async function (username, showPassword = false) {
         id: usersTable.id,
         name: usersTable.name,
         username: usersTable.username,
+        type: usersTable.type,
         ...(showPassword
           ? {
               password: usersTable.password,
@@ -78,6 +122,7 @@ exports.getUserLinks = async function (username) {
 
 exports.createUser = async function ({
   name,
+  type = "user",
   username,
   password,
   photoUrl = null,
@@ -103,6 +148,7 @@ exports.createUser = async function ({
         name,
         username,
         password,
+        type,
         photoUrl,
         description,
       })

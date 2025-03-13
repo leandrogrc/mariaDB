@@ -53,6 +53,7 @@ exports.validateSession = async function (sessionId) {
         id: usersTable.id,
         name: usersTable.name,
         username: usersTable.username,
+        type: usersTable.type,
         description: usersTable.description,
         photoUrl: usersTable.photoUrl,
       })
