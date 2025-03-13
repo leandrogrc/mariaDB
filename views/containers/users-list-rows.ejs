@@ -1,0 +1,58 @@
+<% if (!users.length) { %>
+<tr>
+  <td
+    colspan="4"
+    class="text-center py-4 text-zinc-600 border-b border-zinc-200"
+  >
+    Nenhum usuário encontrado
+  </td>
+</tr>
+<% } %> <% users.forEach(function (user) { %>
+<tr class="border-b border-zinc-200 hover:bg-zinc-100 transition">
+  <td class="w-[280px] py-4">
+    <div class="w-fit flex items-center">
+      <img
+        src="<%= user.photoUrl ? user.photoUrl : `https://ui-avatars.com/api/?name=${user.name.replace(/\s/g, '+')}`%>"
+        class="rounded-full w-8 ml-2 mr-4"
+      />
+      <p><%= user.username %></p>
+    </div>
+  </td>
+  <td class="w-[280px] py-4"><%= user.name %></td>
+  <td class="w-[280px] py-4">
+    <p class="truncate">
+      <%= user.description ? user.description : 'Não informado' %>
+    </p>
+  </td>
+  <td class="w-[120px] py-4"><%= user.links %></td>
+  <td class="w-[120px]">
+    <div class="w-fit mx-auto">
+      <custom-dropdown aria-expanded="false">
+        <div>
+          <button is="custom-dropdown-trigger">
+            <i data-feather="more-vertical" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <custom-dropdown-content position="top">
+          <div class="py-1 flex flex-col gap-0.5" role="none">
+            <a
+              class="cursor-default flex items-center rounded mx-1 px-2 py-2 text-sm text-gray-800 hover:bg-zinc-100 transition"
+              href="/admin/users/<%= user.id %>"
+            >
+              <i data-feather="eye" class="w-4 h-4 mr-2"></i>
+              Ver conta
+            </a>
+            <a
+              class="cursor-default flex items-center rounded mx-1 px-2 py-2 text-sm text-gray-800 hover:bg-zinc-100 transition"
+              href="/admin?tabs=logs&accountId=<%= user.id %>"
+            >
+              <i data-feather="layers" class="w-4 h-4 mr-2"></i>
+              Ver logs
+            </a>
+          </div>
+        </custom-dropdown-content>
+      </custom-dropdown>
+    </div>
+  </td>
+</tr>
+<% }) %>

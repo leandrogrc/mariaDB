@@ -22,14 +22,13 @@
         <i data-feather="lock" class="w-4 h-4 mr-2"></i>
         Alterar senha
       </button>
-      <a
-        id="edit-user-button"
+      <button
+        id="add-admin-button"
         class="cursor-default flex items-center rounded mx-1 px-2 py-2 text-sm text-gray-800 hover:bg-zinc-100 transition"
-        href="/admin/new"
       >
         <i data-feather="shield" class="w-4 h-4 mr-2"></i>
         Adicionar admin
-      </a>
+      </button>
       <form method="post" action="<%= `/logout` %>" class="w-full px-1">
         <input hidden type="text" name="csrf" value="<%= csrf %>" />
         <button
@@ -45,14 +44,23 @@
 </custom-dropdown>
 
 <script>
+  const dropdownTrigger = document.querySelector("#user-dropdown-trigger");
+
   document
     .querySelector("#edit-user-button")
     .addEventListener("click", function () {
-      const dropdownTrigger = document.querySelector("#user-dropdown-trigger");
-      const editUserForm = document.querySelector("#update-user-form");
-
       dropdownTrigger.click();
 
+      const editUserForm = document.querySelector("#update-user-form");
       editUserForm.setAttribute("aria-expanded", "true");
+    });
+
+  document
+    .querySelector("#add-admin-button")
+    .addEventListener("click", function () {
+      dropdownTrigger.click();
+
+      const addAdminForm = document.querySelector("#add-admin-form");
+      addAdminForm.setAttribute("aria-expanded", "true");
     });
 </script>

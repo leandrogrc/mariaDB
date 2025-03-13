@@ -1,19 +1,17 @@
 const {
-  getUserByUsername,
-  createUser,
   getUsersStats,
   getAllUsers,
+  getUserDetails,
+  createUser,
+  getUserByUsername,
 } = require("../db/users");
-const { createSession } = require("../db/session");
-const { hasAdmin } = require("../db/users");
 const { getAllLinks } = require("../db/links");
-const bcrypt = require("bcrypt");
-
-const hashSalt = 10;
 
 exports.adminPage = async (req, res) => {
-  const csrf = req.csrf();
   try {
+    const { tab = "dashboard" } = req.query;
+
+    const csrf = req.csrf();
     const stats = await getUsersStats();
     const { activeLinks, inactiveLinks } = await getAllLinks();
     const { users } = await getAllUsers();
@@ -28,93 +26,58 @@ exports.adminPage = async (req, res) => {
         inactiveLinks,
       },
       users,
+      tab,
     });
   } catch (error) {
     return res.render("error");
   }
 };
 
-exports.adminLoginPage = async (req, res) => {
-  try {
-    const csrf = req.csrf();
-    const { result } = await hasAdmin();
-
-    if (result) {
-      return res.status(200).redirect("/login");
-    }
-
-    return res.status(200).render("register-admin", {
-      csrf,
-      name: "",
-      username: "",
-      error: "",
-    });
-  } catch (error) {
-    return res.status(500).render("error");
-  }
-};
-
-exports.registerAdmin = async (req, res) => {
-  const csrf = req.csrf();
+exports.addAdmin = async (req, res) => {
   const { name, username, password, confirmPassword } = req.body;
   if (!name || !username || !password || !confirmPassword) {
-    return res.status(400).render("register-admin", {
-      csrf,
-      name: "",
-      username: "",
-      error: "Alguns dados estão faltando",
-    });
+    return res.status(400).redirect("/admin");
   }
 
   if (password !== confirmPassword) {
-    return res.status(400).render("register-admin", {
-      csrf,
-      name,
-      username,
-      error: "Senha e confirmação devem ser o mesmo",
-    });
+    return res.status(400).redirect("/admin");
   }
 
   try {
     const alreadyExists = await getUserByUsername(username);
     if (alreadyExists.success) {
-      return res.render("register-admin", {
-        csrf,
-        name,
-        username,
-        error: "Usuário já cadastrado",
-      });
+      return res.status(400).redirect("/admin");
     }
 
-    const cryptPassword = await bcrypt.hash(password, hashSalt);
-    const newuser = await createUser({
+    await createUser({
       type: "admin",
       name,
       username,
-      password: cryptPassword,
+      password,
     });
 
-    if (newuser.success) {
-      const { result: sessionId } = await createSession(newuser.response.id);
-
-      res.cookie("session_token", sessionId, {
-        httpOnly: true,
-        sameSite: "none",
-        secure: true,
-        maxAge: 1000 * 60 * 60,
-      });
-
-      return res.status(200).redirect("/admin");
-    } else {
-      return res.status(500).render("register-admin", {
-        csrf,
-        name,
-        username,
-        error: "Não foi possível criar usuário",
-      });
-    }
+    return res.status(200).redirect("/admin");
   } catch (error) {
-    console.error("Error during user creation:", error);
+    console.error(error);
+    return res.status(500).render("error");
+  }
+};
+
+exports.getUserDetails = async (req, res) => {
+  try {
+    const { id: accountId } = req.params;
+    const response = await getUserDetails(accountId);
+
+    if (response.user) {
+      const csrf = req.csrf();
+
+      return res
+        .status(200)
+        .render("user-details", { csrf, user: response.user });
+    }
+
+    return res.status(404).render("not-found");
+  } catch (error) {
     return res.status(500).render("error");
   }
 };

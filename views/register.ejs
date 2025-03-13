@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="data:," />
     <title>Registrar</title>
   </head>
   <body
@@ -35,7 +35,6 @@
         <label
           for="username"
           class="block text-sm text-zinc-600 font-medium mb-1"
-          value="<%= username %>"
           >Usuário</label
         >
         <input
@@ -43,7 +42,9 @@
           type="text"
           id="username"
           name="username"
+          minlength="5"
           maxlength="25"
+          value="<%= username %>"
           class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
         />
       </fieldset>

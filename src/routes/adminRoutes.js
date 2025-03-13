@@ -2,8 +2,8 @@ const router = require("express").Router();
 
 const {
   adminPage,
-  adminLoginPage,
-  registerAdmin,
+  addAdmin,
+  getUserDetails,
 } = require("../controllers/adminController");
 const { getUsers } = require("../controllers/usersControllers");
 
@@ -12,11 +12,15 @@ const validateSession = require("../middlewares/validateSession");
 const validateAdmin = require("../middlewares/validateAdmin");
 
 router.get("/admin", validateSession, validateAdmin, adminPage);
-router
-  .route("/admin/register")
-  .get(adminLoginPage)
-  .post(csrf.validate, registerAdmin);
+router.post(
+  "/admin/new",
+  validateSession,
+  validateAdmin,
+  csrf.validate,
+  addAdmin
+);
 
 router.get("/admin/users", validateSession, validateAdmin, getUsers);
+router.get("/admin/users/:id", validateSession, validateAdmin, getUserDetails);
 
 module.exports = router;

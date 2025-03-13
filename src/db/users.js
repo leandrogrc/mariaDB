@@ -1,7 +1,10 @@
 const { eq, count, sql, desc, like, and } = require("drizzle-orm");
+const bcrypt = require("bcrypt");
 
 const { db } = require(".");
 const { usersTable, linksTable } = require("./schema");
+
+const hashSalt = 10;
 
 exports.hasAdmin = async function () {
   try {
@@ -38,6 +41,26 @@ exports.getUsersStats = async function () {
   }
 };
 
+exports.getUserDetails = async function (userId) {
+  try {
+    const [user] = await db
+      .select({
+        id: usersTable.id,
+        username: usersTable.username,
+        name: usersTable.name,
+        photoUrl: usersTable.photoUrl,
+        description: usersTable.description,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, userId))
+      .limit(1);
+
+    return { success: true, user };
+  } catch (error) {
+    return { success: false, user: null };
+  }
+};
+
 exports.getAllUsers = async function ({
   name = undefined,
   username = undefined,
@@ -61,6 +84,7 @@ exports.getAllUsers = async function ({
         id: usersTable.id,
         username: usersTable.username,
         name: usersTable.name,
+        description: usersTable.description,
         photoUrl: usersTable.photoUrl,
         links: sql`(${db
           .select({ count: count() })
@@ -159,12 +183,14 @@ exports.createUser = async function ({
       };
     }
 
+    const cryptPassword = await bcrypt.hash(password, hashSalt);
+
     const [{ id }] = await db
       .insert(usersTable)
       .values({
         name,
         username,
-        password,
+        password: cryptPassword,
         type,
         photoUrl,
         description,

@@ -7,7 +7,7 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <link rel="icon" href="data:," />
     <title>Painel Admin</title>
-    <%- include('partials/components/dropdown.ejs') %>
+    <%- include('ui/dropdown.ejs') %>
   </head>
   <body class="bg-zinc-100 min-h-full min-h-screen">
     <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
@@ -15,24 +15,24 @@
         class="bg-white px-4 py-2 relative rounded border border-zinc-300 mb-4 flex items-center justify-between"
       >
         <h1 class="text-lg font-medium">Painel Admin</h1>
-        <div><%- include('partials/admin-dropdown.ejs') %></div>
+        <div><%- include('components/admin-dropdown.ejs') %></div>
       </header>
+      <%- include('components/admin-navigation.ejs') %>
       <section
         class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
       >
         <h1 class="text-black text-xl font-medium mt-4 mb-6">Editar Admin</h1>
-        <%- include('partials/update-user-form.ejs') %>
+        <%- include('components/update-user-form.ejs') %>
       </section>
-      <h1 class="text-black text-xl font-medium mb-6">Estatísticas</h1>
       <section
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+        class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
       >
-        <%- include('partials/admin-stats.ejs') %>
+        <h1 class="text-black text-xl font-medium mt-4 mb-6">
+          Adicionar Admin
+        </h1>
+        <%- include('components/add-admin.ejs') %>
       </section>
-      <section class="bg-white p-4 rounded border border-zinc-300">
-        <h1 class="text-black text-xl font-medium mb-6">Usuários</h1>
-        <%- include('partials/users-list.ejs') %>
-      </section>
+      <%- include('containers/dashboard.ejs') %>
     </main>
     <script>
       feather.replace();

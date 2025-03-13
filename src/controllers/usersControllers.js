@@ -51,7 +51,7 @@ exports.getUsers = async (req, res) => {
       limit,
     });
 
-    return res.render("partials/users-list-rows", { users: result.users });
+    return res.render("containers/users-list-rows", { users: result.users });
   } catch (err) {
     console.error("Error getting users:", err);
     return res.render("error");

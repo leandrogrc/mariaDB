@@ -1,0 +1,92 @@
+<form
+  id="add-admin-form"
+  method="post"
+  action="/admin/new"
+  aria-expanded="false"
+  class="w-full mt-4 pointer-events-none overflow-hidden h-0 opacity-0 aria-expanded:h-auto aria-expanded:opacity-100 aria-expanded:pointer-events-auto transition"
+>
+  <input hidden type="text" name="csrf" value="<%= csrf %>" />
+  <fieldset class="w-full mb-4 flex flex-col items-start">
+    <label for="name" class="block text-sm text-zinc-600 font-medium mb-1"
+      >Nome</label
+    >
+    <input
+      required
+      type="text"
+      id="name"
+      name="name"
+      maxlength="50"
+      class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+    />
+  </fieldset>
+  <fieldset class="w-full mb-4 flex flex-col items-start">
+    <label for="username" class="block text-sm text-zinc-600 font-medium mb-1"
+      >Usuário</label
+    >
+    <input
+      required
+      type="text"
+      id="username"
+      name="username"
+      minlength="5"
+      maxlength="25"
+      class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+    />
+  </fieldset>
+  <div class="flex flex-col md:flex-row md:gap-4">
+    <fieldset class="w-full mb-4 flex flex-col items-start">
+      <label for="password" class="block text-sm text-zinc-600 font-medium mb-1"
+        >Senha</label
+      >
+      <input
+        required
+        type="password"
+        id="password"
+        name="password"
+        minlength="6"
+        maxlength="255"
+        class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+      />
+    </fieldset>
+    <fieldset class="w-full mb-4 flex flex-col items-start">
+      <label
+        for="confirmPassword"
+        class="block text-sm text-zinc-600 font-medium mb-1"
+        >Confirmar senha</label
+      >
+      <input
+        required
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        maxlength="255"
+        class="border px-4 py-2 text-zinc-800 rounded border-zinc-300 w-full outline-indigo-500"
+      />
+    </fieldset>
+  </div>
+  <div class="mt-2 mb-4 flex items-center justify-end gap-4">
+    <button
+      id="close-add-admin-button"
+      type="button"
+      class="h-10 box-border text-red-500 cursor-pointer font-medium text-center py-2 rounded border border-red-500 bg-transparent hover:bg-red-100 transition px-4"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="h-10 text-white cursor-pointer font-medium text-center py-2 rounded bg-indigo-500 hover:bg-indigo-800 transition px-6"
+    >
+      Salvar
+    </button>
+  </div>
+
+  <script>
+    const addAdminForm = document.querySelector("#add-admin-form");
+
+    document
+      .querySelector("#close-add-admin-button")
+      .addEventListener("click", function () {
+        addAdminForm.setAttribute("aria-expanded", "false");
+      });
+  </script>
+</form>

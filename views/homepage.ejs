@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="data:," />
     <title>Painel</title>
-    <%- include('partials/components/dropdown.ejs') %>
+    <%- include('ui/dropdown.ejs') %>
   </head>
   <body class="bg-zinc-100 min-h-full min-h-screen">
     <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
@@ -45,7 +45,7 @@
             </p>
           </div>
           <div class="mt-4 md:mt-0">
-            <%- include('partials/user-dropdown.ejs') %>
+            <%- include('components/user-dropdown.ejs') %>
           </div>
         </div>
       </header>
@@ -53,7 +53,7 @@
         class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
       >
         <h1 class="text-black text-xl font-medium mt-4 mb-6">Editar usuário</h1>
-        <%- include('partials/update-user-form.ejs') %>
+        <%- include('components/update-user-form.ejs') %>
       </section>
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-black text-xl font-medium">Meus links</h1>
@@ -86,14 +86,14 @@
                 class="inline w-4 h-4 mr-1"
               ></i>
               <a
-                class="text-sm overflow-hidden text-ellipsis hover:underline"
+                class="text-sm max-w-2xs truncate hover:underline"
                 href="<%= link.link %>"
                 target="_blank"
                 ><%= link.link %></a
               >
             </div>
           </div>
-          <%- include('partials/link-dropdown.ejs', { link }) %>
+          <%- include('components/link-dropdown.ejs', { link }) %>
         </article>
         <% }) %>
       </section>

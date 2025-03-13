@@ -9,7 +9,7 @@
    *      Button
    *    </button>
    *  </div>
-   *  <custom-dropdown-content>
+   *  <custom-dropdown-content position="top|bottom">
    *    ...
    *  </custom-dropdown-content>
    * </div>
@@ -67,12 +67,23 @@
     }
 
     connectedCallback() {
+      const defaultPosition = "bottom";
+      const availablePostions = new Set(["top", "bottom"]);
+
+      const position = this.getAttribute("position");
+      const currentPosition = availablePostions.has(position)
+        ? position
+        : "bottom";
+
+      const classesByPosition = {
+        bottom: "right-0 mt-2 origin-top-right",
+        top: "right-0 top-0 -translate-y-[calc(100%+8px)]",
+      };
+
       this.role = "menu";
-      this.classList.add(
-        ..."absolute right-0 z-20 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden transition ease-out duration-100 opacity-0 scale-95 pointer-events-none group-aria-expanded:pointer-events-auto group-aria-expanded:opacity-100 group-aria-expanded:scale-100".split(
-          " "
-        )
-      );
+      const classes = `absolute z-20 w-56 ${classesByPosition[currentPosition]} rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden transition ease-out duration-100 opacity-0 scale-95 pointer-events-none group-aria-expanded:pointer-events-auto group-aria-expanded:opacity-100 group-aria-expanded:scale-100`;
+
+      this.classList.add(...classes.split(" "));
       this.setAttribute("aria-orientation", "vertical");
       this.setAttribute("aria-labelledby", "menu-button");
     }
