@@ -2,7 +2,7 @@
   <div class="w-full md:w-fit flex flex-col md:flex-row items-center gap-2">
     <a
       id="dashboard"
-      href="/admin?tab=dashboard"
+      href="/admin/dashboard"
       class="w-full md:w-fit cursor-pointer py-2 px-2 md:px-4 rounded flex items-center justify-start md:justify-center transition"
     >
       <i data-feather="monitor" class="w-5 h-5 mr-2"></i>
@@ -10,7 +10,7 @@
     </a>
     <a
       id="logs"
-      href="/admin?tab=logs"
+      href="/admin/logs"
       class="w-full md:w-fit cursor-pointer py-2 px-2 md:px-4 rounded flex items-center justify-start md:justify-center transition"
     >
       <i data-feather="layers" class="w-5 h-5 mr-2"></i>
@@ -18,7 +18,7 @@
     </a>
     <a
       id="settings"
-      href="/admin?tab=settings"
+      href="/admin/settings"
       class="w-full md:w-fit cursor-pointer py-2 px-2 md:px-4 rounded flex items-center justify-start md:justify-center transition"
     >
       <i data-feather="settings" class="w-5 h-5 mr-2"></i>
@@ -26,11 +26,10 @@
     </a>
   </div>
   <script>
-    const url = new URL(window.location);
+    const pathname = window.location.pathname.split("/").pop();
     const availableTabs = new Set(["dashboard", "logs", "settings"]);
 
-    const searchTab = url.searchParams.get("tab");
-    let currentTab = availableTabs.has(searchTab) ? searchTab : "dashboard";
+    const currentTab = availableTabs.has(pathname) ? pathname : "dashboard";
 
     const active = "text-white bg-indigo-500 hover:bg-indigo-600";
     const inactive = "text-zinc-800 bg-transparent hover:bg-zinc-200";

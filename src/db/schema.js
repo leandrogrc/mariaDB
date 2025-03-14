@@ -44,8 +44,15 @@ const sessionsTable = mysqlTable("sessions", {
   expiresAt: datetime("expires_at", { mode: "date" }).notNull(),
 });
 
+const settingsTable = mysqlTable("settings", {
+  id: int("id").primaryKey().notNull().autoincrement(),
+  key: varchar("key", { length: 50 }).notNull(),
+  value: varchar("value", { length: 255 }).notNull(),
+});
+
 module.exports = {
   usersTable,
   linksTable,
   sessionsTable,
+  settingsTable,
 };

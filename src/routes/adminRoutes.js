@@ -1,9 +1,11 @@
 const router = require("express").Router();
 
 const {
-  adminPage,
+  dashboardPage,
+  settingsPage,
   addAdmin,
   getUserDetails,
+  updateSettings,
 } = require("../controllers/adminController");
 const { getUsers } = require("../controllers/usersControllers");
 
@@ -11,7 +13,15 @@ const csrf = require("../middlewares/csrf");
 const validateSession = require("../middlewares/validateSession");
 const validateAdmin = require("../middlewares/validateAdmin");
 
-router.get("/admin", validateSession, validateAdmin, adminPage);
+router.get("/admin", validateSession, validateAdmin, (_req, res) =>
+  res.redirect("/admin/dashboard")
+);
+router.get("/admin/dashboard", validateSession, validateAdmin, dashboardPage);
+router
+  .route("/admin/settings")
+  .get(validateSession, validateAdmin, settingsPage)
+  .post(validateSession, validateAdmin, csrf.validate, updateSettings);
+
 router.post(
   "/admin/new",
   validateSession,

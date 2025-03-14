@@ -6,17 +6,16 @@ const {
   getUserByUsername,
 } = require("../db/users");
 const { getAllLinks } = require("../db/links");
+const { getSMTPConfig, updateSMTPConfig } = require("../db/settings");
 
-exports.adminPage = async (req, res) => {
+exports.dashboardPage = async (req, res) => {
   try {
-    const { tab = "dashboard" } = req.query;
-
     const csrf = req.csrf();
     const stats = await getUsersStats();
     const { activeLinks, inactiveLinks } = await getAllLinks();
     const { users } = await getAllUsers();
 
-    return res.render("admin", {
+    return res.render("admin-dashboard", {
       csrf,
       user: req.user,
       stats: {
@@ -26,10 +25,42 @@ exports.adminPage = async (req, res) => {
         inactiveLinks,
       },
       users,
-      tab,
     });
   } catch (error) {
     return res.render("error");
+  }
+};
+
+exports.settingsPage = async (req, res) => {
+  try {
+    const csrf = req.csrf();
+    const { config } = await getSMTPConfig();
+
+    return res.render("admin-settings", {
+      csrf,
+      user: req.user,
+      config,
+    });
+  } catch (error) {
+    return res.render("error");
+  }
+};
+
+exports.updateSettings = async (req, res) => {
+  try {
+    const { host, port, user, password, secure = false } = req.body;
+
+    await updateSMTPConfig({
+      smtpHost: host,
+      smtpPort: port,
+      smtpUser: user,
+      smtpPass: password,
+      smtpSecure: secure === "on",
+    });
+
+    return res.status(200).redirect("/admin/settings");
+  } catch (error) {
+    return res.status(500).render("error");
   }
 };
 

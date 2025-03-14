@@ -71,6 +71,13 @@
       "when": 1741874728459,
       "tag": "0009_peaceful_alex_power",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1741965307537,
+      "tag": "0010_clumsy_silver_samurai",
+      "breakpoints": true
     }
   ]
 }

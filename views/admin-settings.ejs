@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" href="data:," />
+    <title>Painel Admin</title>
+    <%- include('ui/switch.ejs') %>
+    <%- include('ui/dropdown.ejs') %>
+  </head>
+  <body class="bg-zinc-100 min-h-full min-h-screen">
+    <main class="mx-auto w-full max-w-7xl py-4 px-4 3xl:px-0">
+      <header
+        class="bg-white px-4 py-2 relative rounded border border-zinc-300 mb-4 flex items-center justify-between"
+      >
+        <h1 class="text-lg font-medium">Painel Admin</h1>
+        <div><%- include('components/admin-dropdown.ejs') %></div>
+      </header>
+      <%- include('components/admin-navigation.ejs') %>
+      <section
+        class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
+      >
+        <h1 class="text-black text-xl font-medium mt-4 mb-6">Editar Admin</h1>
+        <%- include('components/update-user-form.ejs') %>
+      </section>
+      <section
+        class="mb-0 h-0 opacity-0 pointer-events-none border-0 overflow-hidden has-aria-expanded:mb-4 has-aria-expanded:h-auto has-aria-expanded:opacity-100 has-aria-expanded:pointer-events-auto has-aria-expanded:border bg-white px-4 rounded border-zinc-300 transition"
+      >
+        <h1 class="text-black text-xl font-medium mt-4 mb-6">
+          Adicionar Admin
+        </h1>
+        <%- include('components/add-admin.ejs') %>
+      </section>
+      <%- include('containers/settings.ejs') %>
+    </main>
+    <script>
+      feather.replace();
+    </script>
+  </body>
+</html>
