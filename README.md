@@ -41,9 +41,7 @@ Para testar o projeto localmente você precisa:
   ``` 
 2. Copar e alterar o arquivo `.env.example` para `.env`:
   ```env
-  PORT=5000
-  APP_DOMAIN=
-  COOKIE_SECRET=your-secret
+  NEXTAUTH_SECRET=awesomecat
   DATABASE_URL=mysql://root:root@localhost:3306/projeto
   ```
 3. Criar o banco de dados do projeto:
@@ -81,11 +79,11 @@ npm run dev
   - [x] Listagem de links
   - [x] Edição de links
 - [ ] Sistema de logs
-  - [ ] Criação de log
+  - [x] Criação de log
   - [ ] Listagem de logs
 - [ ] Observabilidade de erros
+  - [x] Criação de erros
   - [ ] Listagem de erros
-  - [ ] Criação de erros
 
 ## Banco de dados
 
@@ -103,7 +101,7 @@ Entidades:
   - [x] Token de sessão
   - [ ] Token de atualização de sessão 
 - [ ] **Envio de e-mail**
-  - [ ] Configuração SMTP
+  - [x] Configuração SMTP
   - [ ] Templates de e-mail
     - [ ] Confirmar e-mail
     - [ ] Recuperar senha
