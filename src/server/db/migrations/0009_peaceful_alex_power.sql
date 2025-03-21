@@ -1,0 +1,1 @@
+ALTER TABLE `links` RENAME COLUMN `visible` TO `active`;

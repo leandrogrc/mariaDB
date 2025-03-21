@@ -41,8 +41,7 @@ Para testar o projeto localmente você precisa:
   ``` 
 2. Copar e alterar o arquivo `.env.example` para `.env`:
   ```env
-  PORT=5000
-  COOKIE_SECRET=your-secret
+  NEXTAUTH_SECRET=awesomecat
   DATABASE_URL=mysql://root:root@localhost:3306/projeto
   ```
 3. Criar o banco de dados do projeto:
@@ -59,7 +58,7 @@ Para testar o projeto localmente você precisa:
   ```
 5. Iniciar o projeto:
 ```bash
-npm run start
+npm run dev
 ```
 
 ---
@@ -74,17 +73,17 @@ npm run start
   - [ ] Deleção de usuário
   - [ ] Confirmar conta
   - [ ] Recuperar conta
-- [ ] Links
+- [x] Links
   - [x] Criação de links
   - [x] Deleção de links
   - [x] Listagem de links
   - [x] Edição de links
-- [ ] Sistema de logs
-  - [ ] Criação de log
-  - [ ] Listagem de logs
-- [ ] Observabilidade de erros
-  - [ ] Listagem de erros
-  - [ ] Criação de erros
+- [x] Sistema de logs
+  - [x] Criação de log
+  - [x] Listagem de logs
+- [x] Observabilidade de erros
+  - [x] Criação de erros
+  - [x] Listagem de erros
 
 ## Banco de dados
 
@@ -102,7 +101,7 @@ Entidades:
   - [x] Token de sessão
   - [ ] Token de atualização de sessão 
 - [ ] **Envio de e-mail**
-  - [ ] Configuração SMTP
+  - [x] Configuração SMTP
   - [ ] Templates de e-mail
     - [ ] Confirmar e-mail
     - [ ] Recuperar senha
