@@ -5,6 +5,28 @@ import * as schema from "@/server/db/schema";
 import { z } from "zod";
 
 export const adminRouter = createTRPCRouter({
+  changeUserType: adminProcedure
+    .input(
+      z.object({
+        userId: z.number(),
+        type: z.enum(["admin", "user"]).default("user"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (
+        input.userId === Number(ctx.session.user.id) &&
+        input.type === "user"
+      ) {
+        return;
+      }
+
+      await ctx.db
+        .update(schema.usersTable)
+        .set({
+          type: input.type,
+        })
+        .where(eq(schema.usersTable.id, input.userId));
+    }),
   getStats: adminProcedure.query(async ({ ctx }) => {
     const rows = await ctx.db
       .select({

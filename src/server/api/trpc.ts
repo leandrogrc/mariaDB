@@ -11,9 +11,10 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-// import { auth } from "@/server/auth";
 import { db } from "../db";
 import { auth } from "../auth";
+import * as schema from "../db/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * 1. CONTEXT
@@ -88,6 +89,34 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+const protectedMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const [user] = await db
+    .select({
+      id: schema.usersTable.id,
+      name: schema.usersTable.name,
+      username: schema.usersTable.username,
+      type: schema.usersTable.type,
+    })
+    .from(schema.usersTable)
+    .where(eq(schema.usersTable.id, ctx.session.user.id))
+    .limit(1);
+
+  if (!user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user },
+    },
+  });
+});
+
 /**
  * Protected (authenticated) procedure
  *
@@ -96,31 +125,22 @@ export const publicProcedure = t.procedure;
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
+export const protectedProcedure = t.procedure.use(protectedMiddleware);
 
-  return next({
-    ctx: {
-      // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user },
-    },
+export const adminProcedure = t.procedure
+  .use(protectedMiddleware)
+  .use(async ({ ctx, next }) => {
+    if (!ctx.session || !ctx.session.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    if (ctx.session.user?.type !== "admin") {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    return next({
+      ctx: {
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    });
   });
-});
-
-export const adminProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  if (ctx.session.user.type !== "admin") {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-
-  return next({
-    ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  });
-});

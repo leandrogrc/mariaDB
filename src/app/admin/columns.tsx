@@ -1,12 +1,6 @@
-import Link from "next/link";
-import { Eye, Layers, MoreHorizontal } from "react-feather";
 import { ColumnDef } from "@tanstack/react-table";
 import { Skeleton } from "../_components/ui/skeleton";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../_components/ui/dropdown-menu";
+import { UserItemActions } from "./UserItemActions";
 
 export interface UserItem {
   id: number;
@@ -95,29 +89,7 @@ export const getColumns = (isLoading: boolean): ColumnDef<UserItem>[] => [
       isLoading ? (
         <Skeleton className="h-4 w-full" />
       ) : (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="mx-auto flex h-8 w-8 cursor-pointer items-center justify-center rounded transition hover:bg-zinc-100">
-              <MoreHorizontal className="h-5 w-5" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <Link
-              className="flex items-center gap-2 rounded px-2 py-2 text-sm text-gray-800 transition hover:bg-zinc-100"
-              href={`/admin/user/${row.original.id}`}
-            >
-              <Eye className="mr-1 h-4 w-4 text-inherit" />
-              Ver conta
-            </Link>
-            <Link
-              className="flex items-center gap-2 rounded px-2 py-2 text-sm text-gray-800 transition hover:bg-zinc-100"
-              href={`/admin/logs?userId=${row.original.id}`}
-            >
-              <Layers className="mr-1 h-4 w-4 text-inherit" />
-              Ver logs
-            </Link>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserItemActions user={row.original} />
       ),
   },
 ];

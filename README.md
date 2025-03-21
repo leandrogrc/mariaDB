@@ -78,12 +78,12 @@ npm run dev
   - [x] Deleção de links
   - [x] Listagem de links
   - [x] Edição de links
-- [ ] Sistema de logs
+- [x] Sistema de logs
   - [x] Criação de log
-  - [ ] Listagem de logs
-- [ ] Observabilidade de erros
+  - [x] Listagem de logs
+- [x] Observabilidade de erros
   - [x] Criação de erros
-  - [ ] Listagem de erros
+  - [x] Listagem de erros
 
 ## Banco de dados
 
