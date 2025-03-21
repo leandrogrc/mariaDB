@@ -1,18 +1,16 @@
 "use client";
 
-import { z } from "zod";
 import { api } from "@/trpc/react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronLeft, ChevronRight } from "react-feather";
-
-import { classnames } from "@/utils/classnames";
+import { getColumns, type LogItem } from "./columns";
 
 import {
   Table,
@@ -21,133 +19,101 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../_components/ui/table";
-import { getColumns, type UserItem } from "./columns";
+} from "../../_components/ui/table";
+import { classnames } from "@/utils/classnames";
+import { ChevronLeft, ChevronRight, X } from "react-feather";
+import { z } from "zod";
 
-const skeletonData: UserItem[] = [
+const skeletonData: LogItem[] = [
   {
     id: 0,
-    name: "",
+    title: "",
+    details: "",
+    type: "log",
+    userId: 0,
     username: "",
-    description: null,
-    photoUrl: null,
-    type: "user",
-    links: 0,
+    stack: "",
+    createdAt: new Date(),
   },
 ];
 
 const LIMIT = 10;
+const filterSchema = z.object({ userId: z.coerce.number().nullable() });
 
-const filterSchema = z.object({
-  name: z.string().optional(),
-  username: z.string().optional(),
-});
+export function LogsList() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-type FilterSchema = z.infer<typeof filterSchema>;
-
-export function UsersList() {
   const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<FilterSchema>({
-    name: undefined,
-    username: undefined,
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "createdAt",
+      desc: true,
+    },
+  ]);
+
+  const filters = filterSchema.safeParse({
+    userId: searchParams.get("userId"),
   });
 
-  const { data: users, isLoading } = api.admin.getUsers.useQuery({
-    name: filters.name,
-    username: filters.username,
+  const { data: logs, isLoading } = api.log.getLogs.useQuery({
     page,
+    sort: sorting[0]?.desc ? "desc" : "asc",
+    userId: filters.data?.userId || undefined,
     limit: LIMIT,
   });
 
   const columns = useMemo(
-    () => getColumns(isLoading),
-    [users?.data, isLoading],
+    () => getColumns({ isLoading, onSelectUser }),
+    [logs?.data, isLoading],
   );
 
   const table = useReactTable({
-    data: isLoading ? skeletonData : (users?.data ?? []),
+    data: isLoading ? skeletonData : (logs?.data ?? []),
     columns,
     manualPagination: true,
-    rowCount: users?.rowCount,
+    rowCount: logs?.rowCount,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    state: {
+      sorting,
+    },
   });
 
-  const { register, handleSubmit, reset } = useForm({
-    resolver: zodResolver(filterSchema),
-  });
-
-  function onSubmit(data: FilterSchema) {
-    setPage(1);
-    setFilters({
-      name: data.name || undefined,
-      username: data.username || undefined,
-    });
+  function onSelectUser(userId: number) {
+    router.push(`/admin/logs?userId=${userId}`);
   }
 
-  function clearFilters() {
-    reset();
-    setPage(1);
-    setFilters({
-      name: undefined,
-      username: undefined,
-    });
+  function clearFilter() {
+    router.push("/admin/logs");
   }
 
   const canGoPrevious = page > 1;
-  const canGoNext = users?.hasMore || false;
+  const canGoNext = logs?.hasMore || false;
 
   return (
     <section className="rounded border border-zinc-300 bg-white p-4">
-      <h1 className="mb-6 text-xl font-medium text-black">Lista de usuários</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-12">
-        <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3">
-          <fieldset className="flex w-full flex-col items-start">
-            <label
-              htmlFor="name"
-              className="mb-1 block text-sm font-medium text-zinc-600"
-            >
-              Nome
-            </label>
-            <input
-              type="text"
-              id="name"
-              maxLength={25}
-              {...register("name")}
-              className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
-            />
-          </fieldset>
-          <fieldset className="flex w-full flex-col items-start">
-            <label
-              htmlFor="username"
-              className="mb-1 block text-sm font-medium text-zinc-600"
-            >
-              Usuário
-            </label>
-            <input
-              type="text"
-              id="username"
-              maxLength={25}
-              {...register("username")}
-              className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
-            />
-          </fieldset>
-          <div className="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="w-42 cursor-pointer rounded border border-zinc-400 py-2 text-center text-zinc-600"
-            >
-              Limpar
-            </button>
-            <button
-              type="submit"
-              className="w-42 cursor-pointer rounded bg-indigo-500 py-2 text-center text-white transition hover:bg-indigo-800"
-            >
-              Buscar
-            </button>
+      <h1 className="mb-6 text-xl font-medium text-black">Logs</h1>
+      {filters.data?.userId ? (
+        <div className="mb-4 flex items-center gap-4">
+          <div className="flex h-8 w-fit items-center text-sm">
+            <span className="flex h-full items-center rounded-l border-t border-b border-l border-orange-400 bg-orange-400 px-2 py-1 text-white">
+              Id do usuário
+            </span>
+            <span className="flex h-full items-center rounded-r border-t border-r border-b border-zinc-300 px-2 py-1">
+              {filters.data.userId}
+            </span>
           </div>
+          <button
+            className="flex cursor-pointer items-center gap-1 rounded px-2 py-1 transition hover:bg-zinc-200"
+            onClick={clearFilter}
+          >
+            <span>Limpar</span>
+            <X className="inline-block h-4 w-4" />
+          </button>
         </div>
-      </form>
+      ) : null}
       <div className="rounded border">
         <Table>
           <TableHeader>
@@ -191,7 +157,7 @@ export function UsersList() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Sem usuários
+                  Sem logs
                 </TableCell>
               </TableRow>
             )}
@@ -200,7 +166,7 @@ export function UsersList() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-zinc-600">
-          {users?.rowCount} de {users?.total} usuário(s)
+          {logs?.rowCount} de {logs?.total} log(s)
         </div>
         <div className="flex gap-4">
           <button

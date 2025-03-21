@@ -1,6 +1,7 @@
 import { adminRouter } from "./routes/admin";
 import { authRouter } from "./routes/auth";
 import { linksRouter } from "./routes/links";
+import { logsRouter } from "./routes/logs";
 import { userRouter } from "./routes/user";
 import { createCallerFactory, createTRPCRouter } from "./trpc";
 
@@ -12,6 +13,7 @@ import { createCallerFactory, createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   admin: adminRouter,
+  log: logsRouter,
   user: userRouter,
   link: linksRouter,
 });

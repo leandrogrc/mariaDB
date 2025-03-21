@@ -102,14 +102,14 @@ export const userRouter = createTRPCRouter({
           .where(eq(schema.usersTable.id, ctx.session.user.id))
           .limit(1);
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Usuário atualizado com sucesso",
           details: JSON.stringify(input),
           userId: ctx.session.user.id,
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Não foi possível atualiza usuário",
           details: JSON.stringify(input),
           userId: ctx.session.user.id,

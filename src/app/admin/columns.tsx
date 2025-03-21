@@ -5,7 +5,6 @@ import { Skeleton } from "../_components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../_components/ui/dropdown-menu";
 
@@ -110,10 +109,13 @@ export const getColumns = (isLoading: boolean): ColumnDef<UserItem>[] => [
               <Eye className="mr-1 h-4 w-4 text-inherit" />
               Ver conta
             </Link>
-            <DropdownMenuItem className="flex items-center rounded px-2 py-2 text-sm text-gray-800 transition hover:bg-zinc-100">
+            <Link
+              className="flex items-center gap-2 rounded px-2 py-2 text-sm text-gray-800 transition hover:bg-zinc-100"
+              href={`/admin/logs?userId=${row.original.id}`}
+            >
               <Layers className="mr-1 h-4 w-4 text-inherit" />
               Ver logs
-            </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       ),

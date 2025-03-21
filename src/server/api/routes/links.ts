@@ -25,14 +25,14 @@ export const linksRouter = createTRPCRouter({
           })
           .$returningId();
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Link criado com sucesso",
           details: JSON.stringify({ id: newLink?.id, ...input }),
           userId: ctx.session.user.id,
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Não foi possível criar link",
           details: JSON.stringify(input),
           userId: ctx.session.user.id,
@@ -96,14 +96,14 @@ export const linksRouter = createTRPCRouter({
             ),
           );
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: `Link ${input.id} atualizado com sucesso`,
           details: JSON.stringify(input),
           userId: ctx.session.user.id,
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: `Não foi possível atualizar link ${input.id}`,
           details: JSON.stringify(input),
           userId: ctx.session.user.id,
@@ -145,14 +145,14 @@ export const linksRouter = createTRPCRouter({
           )
           .limit(1);
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Link removido com sucesso",
           details: JSON.stringify(link),
           userId: ctx.session.user.id,
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: `Não foi possível remover link ${input.id}`,
           details: JSON.stringify(link),
           userId: ctx.session.user.id,

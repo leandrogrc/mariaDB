@@ -52,7 +52,7 @@ export const authRouter = createTRPCRouter({
           })
           .$returningId();
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Administrador criado",
           details: JSON.stringify({
             id: newAdmin?.id,
@@ -64,7 +64,7 @@ export const authRouter = createTRPCRouter({
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Administrador criado",
           details: JSON.stringify({
             name: input.name,
@@ -122,7 +122,7 @@ export const authRouter = createTRPCRouter({
           })
           .$returningId();
 
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Usuário criado",
           details: JSON.stringify({
             id: newUser?.id,
@@ -133,7 +133,7 @@ export const authRouter = createTRPCRouter({
           type: "log",
         });
       } catch (error: Error | any) {
-        ctx.db.insert(schema.logsTable).values({
+        await ctx.db.insert(schema.logsTable).values({
           title: "Não foi possível criar conta",
           details: JSON.stringify({
             name: input.name,

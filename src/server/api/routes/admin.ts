@@ -29,16 +29,20 @@ export const adminRouter = createTRPCRouter({
   }),
   getUsers: adminProcedure
     .input(
-      z.object({
-        name: z.string().optional(),
-        username: z.string().optional(),
-        page: z.number().default(1),
-        limit: z.number().default(10),
-      }),
+      z
+        .object({
+          name: z.string().optional(),
+          username: z.string().optional(),
+          page: z.number().default(1),
+          limit: z.number().default(10),
+        })
+        .transform(({ page, limit, ...rest }) => ({
+          ...rest,
+          limit,
+          offset: limit * (page - 1),
+        })),
     )
     .query(async ({ ctx, input }) => {
-      const offset = input.limit * (input.page - 1);
-
       const filters = [];
       if (input.name) {
         filters.push(
@@ -76,13 +80,13 @@ export const adminRouter = createTRPCRouter({
         .where(and(...filters))
         .orderBy(desc(schema.usersTable.createdAt))
         .limit(input.limit)
-        .offset(offset);
+        .offset(input.offset);
 
       return {
         data: users,
         total: total?.count ?? 0,
         rowCount: users.length,
-        hasMore: users.length + offset < (total?.count ?? 0),
+        hasMore: users.length + input.offset < (total?.count ?? 0),
       };
     }),
   getEmailConfig: adminProcedure.query(async ({ ctx }) => {
