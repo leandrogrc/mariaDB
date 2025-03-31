@@ -10,12 +10,48 @@ import {
 import * as schema from "@/server/db/schema";
 
 export const userRouter = createTRPCRouter({
+  getEmailConfirmationCode: protectedProcedure
+    .input(z.object({ confirmationCode: z.string().uuid() }))
+    .query(async ({ ctx, input }) => {
+      const [user] = await ctx.db
+        .select()
+        .from(schema.usersTable)
+        .where(
+          and(
+            eq(schema.usersTable.id, ctx.session.user.id),
+            eq(schema.usersTable.confirmationCode, input.confirmationCode),
+          ),
+        );
+
+      if (user?.id && !user?.confirmedAt) {
+        const confirmedAt = new Date();
+        await ctx.db.insert(schema.logsTable).values({
+          title: "Validação de e-mail realizada com sucesso",
+          details: JSON.stringify({ confirmedAt }),
+          userId: ctx.session.user.id,
+          type: "log",
+        });
+
+        await ctx.db
+          .update(schema.usersTable)
+          .set({ confirmedAt })
+          .where(
+            eq(schema.usersTable.confirmationCode, input.confirmationCode),
+          );
+      }
+
+      return {
+        id: user?.id,
+        confirmationAt: user?.confirmedAt,
+      };
+    }),
   getMe: protectedProcedure.query(async ({ ctx }) => {
     const [user] = await ctx.db
       .select({
         id: schema.usersTable.id,
         name: schema.usersTable.name,
         email: schema.usersTable.email,
+        confirmedAt: schema.usersTable.confirmedAt,
         photoUrl: schema.usersTable.photoUrl,
         description: schema.usersTable.description,
         type: schema.usersTable.type,
