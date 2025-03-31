@@ -15,6 +15,7 @@ export const userRouter = createTRPCRouter({
       .select({
         id: schema.usersTable.id,
         name: schema.usersTable.name,
+        email: schema.usersTable.email,
         photoUrl: schema.usersTable.photoUrl,
         description: schema.usersTable.description,
         type: schema.usersTable.type,
@@ -37,6 +38,7 @@ export const userRouter = createTRPCRouter({
         .select({
           id: schema.usersTable.id,
           name: schema.usersTable.name,
+          email: schema.usersTable.email,
           username: schema.usersTable.username,
           photoUrl: schema.usersTable.photoUrl,
           description: schema.usersTable.description,
@@ -57,6 +59,7 @@ export const userRouter = createTRPCRouter({
         .select({
           id: schema.usersTable.id,
           name: schema.usersTable.name,
+          email: schema.usersTable.email,
           username: schema.usersTable.username,
           type: schema.usersTable.type,
           description: schema.usersTable.description,

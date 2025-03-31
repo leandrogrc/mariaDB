@@ -20,12 +20,31 @@ export const adminRouter = createTRPCRouter({
         return;
       }
 
-      await ctx.db
-        .update(schema.usersTable)
-        .set({
-          type: input.type,
-        })
-        .where(eq(schema.usersTable.id, input.userId));
+      try {
+        await ctx.db
+          .update(schema.usersTable)
+          .set({
+            type: input.type,
+          })
+          .where(eq(schema.usersTable.id, input.userId));
+
+        await ctx.db.insert(schema.logsTable).values({
+          title: `Alterado tipo do usuário para "${input.type}"`,
+          details: JSON.stringify({ userId: input.userId, type: input.type }),
+          type: "log",
+          userId: input.userId,
+        });
+      } catch (error: Error | any) {
+        await ctx.db.insert(schema.logsTable).values({
+          title: `Não foi possível alterar tipo de usuário`,
+          details: JSON.stringify({ userId: input.userId, type: input.type }),
+          type: "error",
+          stack: error?.stack,
+          userId: input.userId,
+        });
+
+        throw error;
+      }
     }),
   getStats: adminProcedure.query(async ({ ctx }) => {
     const rows = await ctx.db
@@ -88,6 +107,7 @@ export const adminRouter = createTRPCRouter({
           id: schema.usersTable.id,
           username: schema.usersTable.username,
           name: schema.usersTable.name,
+          email: schema.usersTable.email,
           description: schema.usersTable.description,
           photoUrl: schema.usersTable.photoUrl,
           type: schema.usersTable.type,

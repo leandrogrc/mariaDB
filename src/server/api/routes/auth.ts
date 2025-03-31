@@ -25,28 +25,42 @@ export const authRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        email: z.string().email(),
         username: z.string(),
         password: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const [alreadyExists] = await ctx.db
-        .select()
+      const [usernameAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
         .from(schema.usersTable)
         .where(eq(schema.usersTable.username, input.username))
         .limit(1);
 
-      if (alreadyExists) {
+      if (usernameAlreadyExists) {
         throw new Error("Usuário já cadastrado");
       }
 
+      const [emailAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
+        .from(schema.usersTable)
+        .where(eq(schema.usersTable.username, input.username))
+        .limit(1);
+
+      if (emailAlreadyExists) {
+        throw new Error("E-mail já cadastrado");
+      }
+
       try {
+        const confirmationCode = randomUUID();
         const cryptPassword = await bcrypt.hash(input.password, hashSalt);
         const [newAdmin] = await ctx.db
           .insert(schema.usersTable)
           .values({
             name: input.name,
             username: input.username,
+            confirmationCode,
+            email: input.email,
             password: cryptPassword,
             type: "admin",
           })
@@ -83,6 +97,7 @@ export const authRouter = createTRPCRouter({
       z.object({
         type: z.enum(["admin", "user"]).default("user"),
         name: z.string(),
+        email: z.string().email(),
         username: z.string(),
         password: z.string(),
       }),
@@ -100,23 +115,36 @@ export const authRouter = createTRPCRouter({
         }
       }
 
-      const [alreadyExists] = await ctx.db
-        .select()
+      const [usernameAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
         .from(schema.usersTable)
         .where(eq(schema.usersTable.username, input.username))
         .limit(1);
 
-      if (alreadyExists) {
+      if (usernameAlreadyExists) {
         throw new Error("Usuário já cadastrado");
       }
 
+      const [emailAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
+        .from(schema.usersTable)
+        .where(eq(schema.usersTable.username, input.username))
+        .limit(1);
+
+      if (emailAlreadyExists) {
+        throw new Error("E-mail já cadastrado");
+      }
+
       try {
+        const confirmationCode = randomUUID();
         const cryptPassword = await bcrypt.hash(input.password, hashSalt);
         const [newUser] = await ctx.db
           .insert(schema.usersTable)
           .values({
             name: input.name,
             username: input.username,
+            confirmationCode,
+            email: input.email,
             password: cryptPassword,
             type: input.type,
           })

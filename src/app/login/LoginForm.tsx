@@ -11,7 +11,7 @@ import { useState } from "react";
 import { classnames } from "@/utils/classnames";
 
 const loginSchema = z.object({
-  username: z.string().min(5).max(25),
+  email: z.string().email().max(255),
   password: z.string().min(5).max(255),
 });
 
@@ -31,14 +31,14 @@ export function LoginForm() {
   async function handleLogin(data: LoginSchema) {
     setIsFetching(true);
     const response = await signIn("credentials", {
-      username: data.username,
+      email: data.email,
       password: data.password,
       redirect: false,
     });
 
     if (response?.error) {
       setIsFetching(false);
-      setError("username", { message: response.code });
+      setError("email", { message: response.code });
       return;
     }
 
@@ -53,19 +53,19 @@ export function LoginForm() {
       <h1 className="mb-6 text-3xl font-medium text-black">Entrar</h1>
       <fieldset className="mb-4 flex w-full flex-col items-start">
         <label
-          htmlFor="username"
+          htmlFor="email"
           className="mb-1 block text-sm font-medium text-zinc-600"
         >
-          Usuário
+          E-mail
         </label>
         <input
           required
-          type="text"
-          id="username"
+          id="email"
+          type="email"
           minLength={5}
           maxLength={25}
           disabled={isFetching}
-          {...register("username")}
+          {...register("email")}
           className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
         />
       </fieldset>
@@ -86,9 +86,9 @@ export function LoginForm() {
           className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
         />
       </fieldset>
-      {errors?.username?.message ? (
+      {errors?.email?.message ? (
         <span className="mb-4 block w-full rounded border border-red-400 bg-red-100 px-4 py-2 text-center text-sm text-red-500">
-          {errors.username.message}
+          {errors.email.message}
         </span>
       ) : null}
       <button

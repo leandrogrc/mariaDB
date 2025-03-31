@@ -29,6 +29,7 @@ const skeletonData: UserItem[] = [
     id: 0,
     name: "",
     username: "",
+    email: "",
     description: null,
     photoUrl: null,
     type: "user",

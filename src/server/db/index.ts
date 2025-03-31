@@ -17,3 +17,4 @@ const conn = globalForDb.conn ?? createPool({ uri: process.env.DATABASE_URL });
 if (process.env.NODE_ENV !== "production") globalForDb.conn = conn;
 
 export const db = drizzle({ client: conn });
+export type Database = typeof db;

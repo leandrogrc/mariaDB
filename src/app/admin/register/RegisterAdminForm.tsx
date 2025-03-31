@@ -13,6 +13,7 @@ import { RegisterFields } from "@/app/_components/RegisterFields";
 const registerSchema = z
   .object({
     name: z.string(),
+    email: z.string().email(),
     username: z.string().min(5).max(25),
     password: z.string().min(5).max(255),
     confirmPassword: z.string(),
@@ -42,6 +43,7 @@ export function RegisterAdminForm() {
     registerUser.mutate(
       {
         name: data.name,
+        email: data.email,
         username: data.username,
         password: data.password,
         type: "admin",
@@ -49,7 +51,7 @@ export function RegisterAdminForm() {
       {
         onSuccess: () => {
           signIn("credentials", {
-            username: data.username,
+            email: data.email,
             password: data.password,
             redirectTo: "/admin",
           });

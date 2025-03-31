@@ -77,6 +77,23 @@ export default async function UserDetails(props: {
             </div>
             <fieldset className="mb-4 flex w-full flex-col items-start">
               <label
+                htmlFor="email"
+                className="mb-1 block text-sm font-medium text-zinc-600"
+              >
+                E-mail
+              </label>
+              <input
+                readOnly
+                id="email"
+                type="email"
+                minLength={5}
+                maxLength={25}
+                value={user.email}
+                className="w-full cursor-not-allowed rounded border border-zinc-300 bg-zinc-100 px-4 py-2 text-zinc-800 outline-indigo-500"
+              />
+            </fieldset>
+            <fieldset className="mb-4 flex w-full flex-col items-start">
+              <label
                 htmlFor="photoUrl"
                 className="mb-1 block text-sm font-medium text-zinc-600"
               >

@@ -7,6 +7,7 @@ import { classnames } from "@/utils/classnames";
 interface RegisterSchema {
   name: string;
   username: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
@@ -38,6 +39,23 @@ export function RegisterFields({
           maxLength={50}
           disabled={isPending}
           {...register("name")}
+          className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
+        />
+      </fieldset>
+      <fieldset className="mb-4 flex w-full flex-col items-start">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-sm font-medium text-zinc-600"
+        >
+          E-mail
+        </label>
+        <input
+          required
+          id="email"
+          type="email"
+          maxLength={255}
+          disabled={isPending}
+          {...register("email")}
           className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
         />
       </fieldset>
