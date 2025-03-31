@@ -25,8 +25,10 @@ export function LogSheet({
   title,
   details,
   type,
+  userId,
   username,
   stack,
+  createdAt,
 }: LogSheetProps) {
   return (
     <Sheet>
@@ -38,7 +40,7 @@ export function LogSheet({
       <SheetContent className="w-full sm:max-w-[640px]">
         <SheetHeader>
           <SheetTitle>Detalhes de log</SheetTitle>
-          <SheetDescription>
+          <SheetDescription className="flex items-center gap-2">
             <span
               className={classnames({
                 "rounded px-2 py-1": true,
@@ -48,6 +50,9 @@ export function LogSheet({
             >
               {type}
             </span>
+            <small className="text-sm text-zinc-600">
+              {createdAt.toLocaleString()}
+            </small>
           </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-4 px-4">
@@ -59,14 +64,16 @@ export function LogSheet({
               {title}
             </p>
           </div>
-          <div className="flex w-full flex-col items-start">
-            <small className="mb-1 block text-sm font-medium text-zinc-600">
-              Usuário
-            </small>
-            <p className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800">
-              {username}
-            </p>
-          </div>
+          {userId ? (
+            <div className="flex w-full flex-col items-start">
+              <small className="mb-1 block text-sm font-medium text-zinc-600">
+                Usuário
+              </small>
+              <p className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800">
+                {username}
+              </p>
+            </div>
+          ) : null}
           {details ? (
             <div className="flex w-full flex-col items-start">
               <small className="mb-1 block text-sm font-medium text-zinc-600">
@@ -86,7 +93,7 @@ export function LogSheet({
               </small>
               <div className="w-full overflow-auto rounded bg-zinc-200 p-4 text-sm text-zinc-800">
                 <code>
-                  <pre>{JSON.stringify(JSON.parse(stack), null, 2)}</pre>
+                  <pre>{stack}</pre>
                 </code>
               </div>
             </div>
