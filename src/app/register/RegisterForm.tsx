@@ -12,6 +12,7 @@ import { RegisterFields } from "../_components/RegisterFields";
 const registerSchema = z
   .object({
     name: z.string(),
+    email: z.string().email(),
     username: z.string().min(5).max(25),
     password: z.string().min(5).max(255),
     confirmPassword: z.string(),
@@ -42,13 +43,14 @@ export function RegisterForm() {
       {
         name: data.name,
         username: data.username,
+        email: data.email,
         password: data.password,
         type: "user",
       },
       {
         onSuccess: () => {
           signIn("credentials", {
-            username: data.username,
+            email: data.email,
             password: data.password,
             redirectTo: "/account",
           });

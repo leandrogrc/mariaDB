@@ -18,6 +18,9 @@ export const usersTable = mysqlTable("users", {
   username: varchar("username", { length: 25 })
     .notNull()
     .unique("unique_username"),
+  email: varchar("email", { length: 255 }).notNull().unique("unique_email"),
+  confirmedAt: datetime("confirmed_at"),
+  confirmationCode: varchar("confirmation_code", { length: 255 }),
   password: varchar("password", { length: 255 }).notNull(),
   createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)

@@ -6,6 +6,7 @@ export interface UserItem {
   id: number;
   username: string;
   name: string;
+  email: string;
   description: string | null;
   photoUrl: string | null;
   type: "admin" | "user";
@@ -20,16 +21,21 @@ export const getColumns = (isLoading: boolean): ColumnDef<UserItem>[] => [
       isLoading ? (
         <Skeleton className="h-4 w-full" />
       ) : (
-        <div className="flex w-full items-center">
+        <div
+          className="flex w-fit max-w-[240px] min-w-[120px] items-center"
+          title={row.original.username}
+        >
           <img
             src={
               row.original.photoUrl
                 ? row.original.photoUrl
                 : `https://ui-avatars.com/api/?name=${row.original.name.replace(/\s/g, "+")}`
             }
-            className="mr-4 ml-2 w-8 rounded-full"
+            width={32}
+            height={32}
+            className="mr-4 ml-2 inline-block h-8 w-8 rounded-full"
           />
-          <p>{row.original.username}</p>
+          <p className="inline-block w-fit truncate">{row.original.username}</p>
         </div>
       ),
   },
@@ -41,7 +47,18 @@ export const getColumns = (isLoading: boolean): ColumnDef<UserItem>[] => [
       isLoading ? (
         <Skeleton className="h-4 w-full" />
       ) : (
-        <p>{row.original.name}</p>
+        <p className="max-w-[240px] truncate">{row.original.name}</p>
+      ),
+  },
+  {
+    id: "email",
+    header: "E-mail",
+    accessorKey: "email",
+    cell: ({ row }) =>
+      isLoading ? (
+        <Skeleton className="h-4 w-full" />
+      ) : (
+        <p className="max-w-[240px] truncate">{row.original.email}</p>
       ),
   },
   {
@@ -52,7 +69,7 @@ export const getColumns = (isLoading: boolean): ColumnDef<UserItem>[] => [
       isLoading ? (
         <Skeleton className="h-4 w-full" />
       ) : (
-        <p>
+        <p className="max-w-[240px] truncate">
           {row.original.description
             ? row.original.description
             : "Não informado"}

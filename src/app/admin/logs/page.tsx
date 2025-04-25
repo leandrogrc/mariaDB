@@ -12,7 +12,7 @@ export default async function LogsPage() {
     return redirect("/login");
   }
 
-  await api.log.getLogs.prefetch({ page: 1, limit: 10 });
+  await api.log.getLogs.prefetch({ sort: "desc", page: 1, limit: 10 });
 
   return (
     <HydrateClient>

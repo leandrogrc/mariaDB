@@ -1,15 +1,76 @@
 import { z } from "zod";
-import { count, eq } from "drizzle-orm";
+import { randomUUID } from "node:crypto";
+import { count, eq, or } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import { render } from "@react-email/components";
+import CreateAccountEmail from "@/server/emails/CreateAccountEmail";
 
 import {
   adminProcedure,
   createTRPCRouter,
   publicProcedure,
 } from "@/server/api/trpc";
+import type { Database } from "@/server/db";
 import * as schema from "@/server/db/schema";
 
 const hashSalt = 10;
+
+async function sendCreateAccountEmail(
+  db: Database,
+  confirmationCode: string,
+  email: string,
+  name: string,
+) {
+  const settings = await db
+    .select()
+    .from(schema.settingsTable)
+    .where(
+      or(
+        eq(schema.settingsTable.key, "smtp_host"),
+        eq(schema.settingsTable.key, "smtp_port"),
+        eq(schema.settingsTable.key, "smtp_user"),
+        eq(schema.settingsTable.key, "smtp_pass"),
+        eq(schema.settingsTable.key, "smtp_secure"),
+      ),
+    );
+
+  const smtpHost = settings.find(({ key }) => key === "smtp_host")?.value;
+  const smtpPort = settings.find(({ key }) => key === "smtp_port")?.value;
+  const smtpUser = settings.find(({ key }) => key === "smtp_user")?.value;
+  const smtpPass = settings.find(({ key }) => key === "smtp_pass")?.value;
+  const smtpSecure = settings.find(({ key }) => key === "smtp_secure")?.value;
+
+  if (
+    smtpHost &&
+    smtpPort &&
+    smtpUser &&
+    smtpPass &&
+    smtpSecure !== undefined
+  ) {
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure === "true",
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
+
+    const emailHtml = await render(
+      CreateAccountEmail({ name, code: confirmationCode }),
+    );
+    const options = {
+      from: "no_reply@linktree.com",
+      to: email,
+      subject: "Confirmação de conta",
+      html: emailHtml,
+    };
+
+    await transporter.sendMail(options);
+  }
+}
 
 export const authRouter = createTRPCRouter({
   hasAdmin: publicProcedure.query(async ({ ctx }) => {
@@ -25,32 +86,53 @@ export const authRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        email: z.string().email(),
         username: z.string(),
         password: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const [alreadyExists] = await ctx.db
-        .select()
+      const [usernameAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
         .from(schema.usersTable)
         .where(eq(schema.usersTable.username, input.username))
         .limit(1);
 
-      if (alreadyExists) {
+      if (usernameAlreadyExists) {
         throw new Error("Usuário já cadastrado");
       }
 
+      const [emailAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
+        .from(schema.usersTable)
+        .where(eq(schema.usersTable.username, input.username))
+        .limit(1);
+
+      if (emailAlreadyExists) {
+        throw new Error("E-mail já cadastrado");
+      }
+
       try {
+        const confirmationCode = randomUUID();
         const cryptPassword = await bcrypt.hash(input.password, hashSalt);
         const [newAdmin] = await ctx.db
           .insert(schema.usersTable)
           .values({
             name: input.name,
             username: input.username,
+            confirmationCode,
+            email: input.email,
             password: cryptPassword,
             type: "admin",
           })
           .$returningId();
+
+        await sendCreateAccountEmail(
+          ctx.db,
+          confirmationCode,
+          input.email,
+          input.name,
+        );
 
         await ctx.db.insert(schema.logsTable).values({
           title: "Administrador criado",
@@ -83,6 +165,7 @@ export const authRouter = createTRPCRouter({
       z.object({
         type: z.enum(["admin", "user"]).default("user"),
         name: z.string(),
+        email: z.string().email(),
         username: z.string(),
         password: z.string(),
       }),
@@ -100,27 +183,47 @@ export const authRouter = createTRPCRouter({
         }
       }
 
-      const [alreadyExists] = await ctx.db
-        .select()
+      const [usernameAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
         .from(schema.usersTable)
         .where(eq(schema.usersTable.username, input.username))
         .limit(1);
 
-      if (alreadyExists) {
+      if (usernameAlreadyExists) {
         throw new Error("Usuário já cadastrado");
       }
 
+      const [emailAlreadyExists] = await ctx.db
+        .select({ id: schema.usersTable.id })
+        .from(schema.usersTable)
+        .where(eq(schema.usersTable.username, input.username))
+        .limit(1);
+
+      if (emailAlreadyExists) {
+        throw new Error("E-mail já cadastrado");
+      }
+
       try {
+        const confirmationCode = randomUUID();
         const cryptPassword = await bcrypt.hash(input.password, hashSalt);
         const [newUser] = await ctx.db
           .insert(schema.usersTable)
           .values({
             name: input.name,
             username: input.username,
+            confirmationCode,
+            email: input.email,
             password: cryptPassword,
             type: input.type,
           })
           .$returningId();
+
+        await sendCreateAccountEmail(
+          ctx.db,
+          confirmationCode,
+          input.email,
+          input.name,
+        );
 
         await ctx.db.insert(schema.logsTable).values({
           title: "Usuário criado",

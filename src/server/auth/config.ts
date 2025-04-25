@@ -26,6 +26,7 @@ declare module "next-auth" {
       id: number;
       name: string;
       username: string;
+      email: string;
       type: "admin" | "user";
     };
   }
@@ -37,12 +38,12 @@ declare module "next-auth" {
 }
 
 const loginSchema = z.object({
-  username: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 
 class InvalidLoginError extends CredentialsSignin {
-  code = "Usuário ou senha inválidos";
+  code = "E-mail ou senha inválidos";
 }
 
 /**
@@ -92,9 +93,9 @@ export const authConfig = {
     CredentialsProvider({
       name: "Credenciais",
       credentials: {
-        username: {
-          label: "username",
-          type: "text",
+        email: {
+          label: "email",
+          type: "email",
         },
         password: {
           label: "password",
@@ -110,7 +111,7 @@ export const authConfig = {
         const [user] = await db
           .select()
           .from(schema.usersTable)
-          .where(eq(schema.usersTable.username, input.data.username))
+          .where(eq(schema.usersTable.email, input.data.email))
           .limit(1);
 
         if (!user) {
@@ -130,6 +131,7 @@ export const authConfig = {
           id: user.id,
           name: user.name,
           username: user.username,
+          email: user.email,
           type: user.type,
         };
       },

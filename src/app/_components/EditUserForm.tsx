@@ -8,19 +8,28 @@ import { User } from "@/server/db/schema";
 import { api } from "@/trpc/react";
 import { classnames } from "@/utils/classnames";
 import { RefreshCw } from "lucide-react";
+import { Check } from "react-feather";
 
 interface EditUserFormProps {
   onSuccess: () => void;
   onCancel: () => void;
   user: Pick<
     User,
-    "id" | "name" | "photoUrl" | "description" | "type" | "username"
+    | "id"
+    | "name"
+    | "photoUrl"
+    | "description"
+    | "type"
+    | "username"
+    | "email"
+    | "confirmedAt"
   >;
 }
 
 const userSchema = z.object({
   name: z.string().max(50),
   username: z.string(),
+  email: z.string().email(),
   photoUrl: z.string().max(500).nullable(),
   description: z.string().max(50).nullable(),
 });
@@ -36,6 +45,7 @@ export function EditUserForm({ user, onSuccess, onCancel }: EditUserFormProps) {
       name: user.name,
       username: user.username,
       photoUrl: user.photoUrl,
+      email: user.email,
       description: user.description,
     },
   });
@@ -91,6 +101,33 @@ export function EditUserForm({ user, onSuccess, onCancel }: EditUserFormProps) {
           />
         </fieldset>
       </div>
+      <fieldset className="mb-4 flex w-full flex-col items-start">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-sm font-medium text-zinc-600"
+        >
+          E-mail
+        </label>
+        <input
+          readOnly
+          type="text"
+          id="email"
+          {...register("email")}
+          className="w-full cursor-not-allowed rounded border border-zinc-300 bg-zinc-100 px-4 py-2 text-zinc-800 outline-indigo-500"
+        />
+        <ul>
+          {!user.confirmedAt ? (
+            <li className="mt-1 text-sm text-orange-500">
+              E-mail não verificado.
+            </li>
+          ) : (
+            <li className="mt-1 text-sm text-indigo-500">
+              <Check className="mr-1 inline-block h-4 w-4" />
+              E-mail verificado
+            </li>
+          )}
+        </ul>
+      </fieldset>
       <fieldset className="mb-4 flex w-full flex-col items-start">
         <label
           htmlFor="photoUrl"

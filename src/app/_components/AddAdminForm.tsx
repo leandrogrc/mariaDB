@@ -15,6 +15,7 @@ interface AddAdminFormProps {
 const registerSchema = z
   .object({
     name: z.string(),
+    email: z.string().email(),
     username: z.string().min(5).max(25),
     password: z.string().min(5).max(255),
     confirmPassword: z.string(),
@@ -42,6 +43,7 @@ export function AddAdminForm({ onCancel, onSuccess }: AddAdminFormProps) {
     addAdmin.mutate(
       {
         name: data.name,
+        email: data.email,
         username: data.username,
         password: data.password,
       },
@@ -72,6 +74,23 @@ export function AddAdminForm({ onCancel, onSuccess }: AddAdminFormProps) {
           disabled={addAdmin.isPending}
           {...register("name")}
           maxLength={50}
+          className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
+        />
+      </fieldset>
+      <fieldset className="mb-4 flex w-full flex-col items-start">
+        <label
+          htmlFor="email"
+          className="mb-1 block text-sm font-medium text-zinc-600"
+        >
+          E-mail
+        </label>
+        <input
+          required
+          id="email"
+          type="email"
+          maxLength={255}
+          disabled={addAdmin.isPending}
+          {...register("email")}
           className="w-full rounded border border-zinc-300 px-4 py-2 text-zinc-800 outline-indigo-500"
         />
       </fieldset>

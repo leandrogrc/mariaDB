@@ -71,7 +71,7 @@ npm run dev
   - [x] Criação de usuário
   - [x] Edição de usuário
   - [ ] Deleção de usuário
-  - [ ] Confirmar conta
+  - [x] Confirmar conta
   - [ ] Recuperar conta
 - [x] Links
   - [x] Criação de links
@@ -102,11 +102,13 @@ Entidades:
   - [ ] Token de atualização de sessão 
 - [ ] **Envio de e-mail**
   - [x] Configuração SMTP
-  - [ ] Templates de e-mail
-    - [ ] Confirmar e-mail
+  - [x] Templates de e-mail
+    - [x] Confirmar e-mail
     - [ ] Recuperar senha
-- [ ] **Páginas web**
-  - [x] Página de usuário
+- [x] **Páginas web**
+  - [x] Painel administrativo
+  - [x] Painel de usuário
+  - [x] Página de links do usuário
   - [x] Página de gerenciamento de dados
 - [ ] **Testes**
   - [ ] Testes unitários

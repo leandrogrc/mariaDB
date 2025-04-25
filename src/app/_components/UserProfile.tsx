@@ -14,7 +14,14 @@ import { Collapsible, CollapsibleContent } from "../_components/ui/collapsible";
 interface UserProfileProps {
   user: Pick<
     User,
-    "id" | "name" | "photoUrl" | "description" | "type" | "username"
+    | "id"
+    | "name"
+    | "photoUrl"
+    | "description"
+    | "type"
+    | "username"
+    | "email"
+    | "confirmedAt"
   >;
 }
 
